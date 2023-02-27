@@ -38,7 +38,7 @@
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/favDetailsFragment"
-        android:name="com.example.weatherapp.ui.FavDetailsFragment"
+        android:name="com.example.weatherapp.ui.favouriteDetails.FavDetailsFragment"
         android:label="FavDetailsFragment" >
         <argument
             android:name="favItem"

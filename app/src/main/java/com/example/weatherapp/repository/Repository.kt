@@ -14,6 +14,7 @@ import com.example.weatherapp.model.FavouritePlace
 import com.example.weatherapp.model.Root
 import com.example.weatherapp.network.Api
 import com.example.weatherapp.network.RetrofitHelper
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 
 object Repository {
 
@@ -26,6 +27,18 @@ object Repository {
         ,"bec88e8dd2446515300a492c3862a10e"
         ,"metric"
         ,"en")?.body()!!
+
+    suspend fun getFavDetails(context: Context,lat: Double,long: Double): Root?{
+        var result: Root?
+        if(checkForInternet(context)){
+            result=getRoot(lat,long)
+
+        }else{
+            result=null
+        }
+        return result
+    }
+
 
     suspend fun getHomeData(context: Context,lat: Double,long: Double): Root?{
         var result: Root?
@@ -78,7 +91,7 @@ object Repository {
     suspend fun insertRoot(context: Context, root: Root)=
         AppDatabase.getInstance(context)?.homeDAO()?.insertRoot(root)
 
-    private fun checkForInternet(context: Context): Boolean {
+    fun checkForInternet(context: Context): Boolean {
 
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

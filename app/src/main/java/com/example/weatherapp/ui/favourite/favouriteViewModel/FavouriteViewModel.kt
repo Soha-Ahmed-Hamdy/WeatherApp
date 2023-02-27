@@ -19,6 +19,7 @@ class FavouriteViewModel(context: Context) : ViewModel() {
     val favWeather:LiveData<List<FavouritePlace>> = _favWeather
 
 
+
     init {
         getFav(context)
 
@@ -41,6 +42,10 @@ class FavouriteViewModel(context: Context) : ViewModel() {
             repo.deleteFavCountry(context,fav)
             getFav(context)
         }
+    }
+
+    fun checkConnectivity(context: Context):Boolean{
+        return repo.checkForInternet(context)
     }
 
     private val _text = MutableLiveData<String>().apply {

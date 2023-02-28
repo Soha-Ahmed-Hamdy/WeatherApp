@@ -15,6 +15,8 @@ import com.example.weatherapp.model.Root
 import com.example.weatherapp.network.Api
 import com.example.weatherapp.network.RetrofitHelper
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 object Repository {
 
@@ -28,15 +30,22 @@ object Repository {
         ,"metric"
         ,"en")?.body()!!
 
-    suspend fun getFavDetails(context: Context,lat: Double,long: Double): Root?{
-        var result: Root?
-        if(checkForInternet(context)){
-            result=getRoot(lat,long)
+    suspend fun getFavDetails(context: Context,lat: Double,long: Double): Flow<Root?> {
+        return flow {
+            var result= apiObj.getRoot(lat,long)?.body()!!
+            if (result != null) {
 
-        }else{
-            result=null
+                emit(result)
+            }
         }
-        return result
+//        var result: Root?
+//        if(checkForInternet(context)){
+//            result=getRoot(lat,long)
+//
+//        }else{
+//            result=null
+//        }
+//        return result
     }
 
 

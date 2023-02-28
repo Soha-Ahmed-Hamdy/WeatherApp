@@ -34,12 +34,12 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.example.weatherapp.ui.MapFragment"
-        android:label="fragment_map"
+        android:label="Map"
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/favDetailsFragment"
         android:name="com.example.weatherapp.ui.favouriteDetails.FavDetailsFragment"
-        android:label="FavDetailsFragment" >
+        android:label="Favourite City Weather" >
         <argument
             android:name="favItem"
             app:argType="com.example.weatherapp.model.FavouritePlace" />

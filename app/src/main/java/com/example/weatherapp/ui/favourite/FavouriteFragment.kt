@@ -23,6 +23,7 @@ class FavouriteFragment : Fragment() {
     lateinit var favList: List<FavouritePlace?>
     lateinit var favAdapter: FavouritAdapter
     lateinit var fact: FactoryFavouriteWeather
+    lateinit var  favouriteViewModel: FavouriteViewModel
 
 
     // This property is only valid between onCreateView and
@@ -40,7 +41,7 @@ class FavouriteFragment : Fragment() {
         val root: View = binding.root
 
         fact= FactoryFavouriteWeather(requireContext())
-        var favouriteViewModel= ViewModelProvider(requireActivity(),fact).get(FavouriteViewModel::class.java)
+        favouriteViewModel= ViewModelProvider(requireActivity(),fact).get(FavouriteViewModel::class.java)
 
         binding.floatingAddFav.setOnClickListener {
             if(favouriteViewModel.checkConnectivity(requireContext())){
@@ -53,6 +54,7 @@ class FavouriteFragment : Fragment() {
 
         favouriteViewModel.favWeather.observe(viewLifecycleOwner) {
             favList=it
+
             var listener={
                     favPlace: FavouritePlace ->
                 favouriteViewModel.deleteFav(requireContext(),favPlace)

@@ -25,4 +25,18 @@
     <string name="api_key">AIzaSyAbuHdF1hB_ddtCtgEZ7iE3cDqXk4zpVJU</string>
     <string name="search">Search</string>
     <string name="country_name">country name</string>
+    <string name="languages">Languages</string>
+    <string name="location">Location</string>
+    <string name="gps">GPS</string>
+    <string name="map">Map</string>
+    <string name="celsius">Celsius</string>
+    <string name="notification">Notification</string>
+    <string name="disable">Disable</string>
+    <string name="enable">Enable</string>
+    <string name="temperature">Temperature</string>
+    <string name="ultra_violet">Ultra Violet</string>
+    <string name="arabic">Arabic</string>
+    <string name="english">English</string>
+    <string name="kelvin">Kelvin</string>
+    <string name="fahrenheit">Fahrenheit</string>
 </resources>

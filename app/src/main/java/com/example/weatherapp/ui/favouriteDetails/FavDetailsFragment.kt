@@ -1,9 +1,7 @@
 package com.example.weatherapp.ui.favouriteDetails
 
-import android.content.Intent
-import android.content.res.Configuration
+
 import android.os.Bundle
-import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,21 +10,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.lottie.LottieAnimationView
 import com.example.weatherapp.databinding.FragmentFavDetailsBinding
 import com.example.weatherapp.model.ApiState
 import com.example.weatherapp.model.Current
 import com.example.weatherapp.model.Daily
 import com.example.weatherapp.model.FavouritePlace
-import com.example.weatherapp.ui.home.HomeViewModel.FactoryHomeWeather
-import com.example.weatherapp.ui.home.HomeViewModel.HomeViewModel
 import com.example.weatherapp.ui.home.Utility
 import com.example.weatherapp.ui.home.homeAdapters.DayAdapter
 import com.example.weatherapp.ui.home.homeAdapters.HourAdapter
-import com.google.android.gms.location.*
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -37,14 +29,14 @@ class FavDetailsFragment : Fragment() {
     private var _binding: FragmentFavDetailsBinding? = null
     lateinit var fact: FactoryFavDetails
     lateinit var dayAdapter: DayAdapter
-    lateinit var dayList: List<Daily?>
+    private lateinit var dayList: List<Daily?>
     lateinit var hourAdapter: HourAdapter
-    lateinit var hourList: List<Current?>
+    private lateinit var hourList: List<Current?>
     lateinit var currentDayWeather: Current
     lateinit var lat:String
     lateinit var favItemData: FavouritePlace
     lateinit var favDetailsViewModel: FavouriteDetailsViewModel
-    lateinit var progressIndicator:LottieAnimationView
+    private lateinit var progressIndicator:LottieAnimationView
     lateinit var countDownTime: TextView
 
 
@@ -64,29 +56,30 @@ class FavDetailsFragment : Fragment() {
             favItemData= it?.getSerializable("favItem") as FavouritePlace
 
         }
-
+        progressIndicator=binding.indicator
+        countDownTime = binding.tvIndicator
+        countDownTime.text = "Loading..!!"
         fact= FactoryFavDetails(requireContext(),favItemData.lat,favItemData.lon)
         favDetailsViewModel= ViewModelProvider(requireActivity(),fact).get(FavouriteDetailsViewModel::class.java)
         favDetailsViewModel.getFavRootDetails(requireContext(),favItemData.lat,favItemData.lon)
 
 
-
+        //lottie : https://assets6.lottiefiles.com/packages/lf20_ahY2hu.json
 
         lifecycleScope.launch {
-            progressIndicator=binding.indicator
-            countDownTime = binding.tvIndicator
             favDetailsViewModel.stateFlow.collectLatest {
                 when (it){
                     is ApiState.Loading->{
-                        delay(50)
+
                         disableViews()
+                        delay(3000)
                         countDownTime.text = "Loading..!!"
                     }
                     is ApiState.Success->{
 
                         countDownTime.text = "Finished!!"
-                        delay(5)
-                        initViews()
+                        delay(10)
+
                         progressIndicator.visibility = View.GONE
                         binding.tvIndicator.visibility = View.GONE
 
@@ -110,11 +103,12 @@ class FavDetailsFragment : Fragment() {
                         binding.todayTemp.text=currentDayWeather.temp.toInt().toString()+ " °C"
                         binding.todayImg.setImageResource(Utility.getWeatherStatusIcon(currentDayWeather.weather[0].icon))
                         binding.weatherMood.text=currentDayWeather.weather[0].description
-
+                        delay(5)
+                        initViews()
 
                     }
                     is ApiState.Failure->{
-                        Toast.makeText(requireContext(),"Failure $it", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(),"Failure ${it.msg}", Toast.LENGTH_LONG).show()
 
                     }
                 }
@@ -124,16 +118,7 @@ class FavDetailsFragment : Fragment() {
         return root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-    }
     /*fun startProgressIndicator(intcountTimeDown:Int){
 
         disableViews()

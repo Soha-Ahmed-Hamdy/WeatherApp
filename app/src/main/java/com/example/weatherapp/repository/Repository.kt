@@ -4,17 +4,11 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.weatherapp.database.AppDatabase
-import com.example.weatherapp.database.favouritePlaceDAO
-import com.example.weatherapp.model.Current
-import com.example.weatherapp.model.Daily
 import com.example.weatherapp.model.FavouritePlace
 import com.example.weatherapp.model.Root
 import com.example.weatherapp.network.Api
 import com.example.weatherapp.network.RetrofitHelper
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -28,11 +22,11 @@ object Repository {
         ,long
         ,"bec88e8dd2446515300a492c3862a10e"
         ,"metric"
-        ,"en")?.body()!!
+        ,"en").body()!!
 
     suspend fun getFavDetails(context: Context,lat: Double,long: Double): Flow<Root?> {
         return flow {
-            var result= apiObj.getRoot(lat,long)?.body()!!
+            val result= apiObj.getRoot(lat,long).body()!!
             if (result != null) {
 
                 emit(result)
@@ -48,13 +42,12 @@ object Repository {
 //        return result
     }
 
-
     suspend fun getHomeData(context: Context,lat: Double,long: Double): Root?{
-        var result: Root?
+        val result: Root?
         if(checkForInternet(context)){
             result=getRoot(lat,long)
             deleteHomeData(context)
-            insertRoot(context,getRoot(lat,long)!!)
+            insertRoot(context,getRoot(lat,long))
         }else{
             result=getLocalRoot(context)
         }
@@ -63,23 +56,13 @@ object Repository {
 
 
 
-//    suspend fun getDaily(): List<Daily> = apiObj.getRoot(30.6210748
-//        ,32.2687504
-//        ,"bec88e8dd2446515300a492c3862a10e"
-//        ,"metric"
-//        ,"en")?.body()!!.daily
-//
+
 //    suspend fun getHourly(): List<Current> = apiObj.getRoot(30.6210748
 //        ,32.2687504
 //        ,"bec88e8dd2446515300a492c3862a10e"
 //        ,"metric"
 //        ,"en")?.body()!!.hourly
 //
-//    suspend fun getCurrentDayWeather(): Current? = apiObj.getRoot(30.6210748
-//        ,32.2687504
-//        ,"bec88e8dd2446515300a492c3862a10e"
-//        ,"metric"
-//        ,"en")?.body()!!.current
 
     suspend fun insertFavCountry(context: Context,favPlace: FavouritePlace){
         AppDatabase.getInstance(context)?.favouritePlaceDAO()?.insertFavourite(favPlace)
@@ -88,7 +71,7 @@ object Repository {
         AppDatabase.getInstance(context)?.favouritePlaceDAO()?.deleteFavouritePlace(favPlace)
     }
 
-    suspend fun getAllFavCountry(context: Context): List<FavouritePlace>? =
+    fun getAllFavCountry(context: Context)=
         AppDatabase.getInstance(context)?.favouritePlaceDAO()?.allFavouriteWeather()
 
     suspend fun getLocalRoot(context: Context): Root? =
@@ -96,10 +79,8 @@ object Repository {
 
     suspend fun deleteHomeData(context: Context)=
         AppDatabase.getInstance(context)?.homeDAO()?.deleteRootData()
-
     suspend fun insertRoot(context: Context, root: Root)=
         AppDatabase.getInstance(context)?.homeDAO()?.insertRoot(root)
-
     fun checkForInternet(context: Context): Boolean {
 
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

@@ -172,10 +172,6 @@ class HomeFragment : Fragment() {
             val mLastLocation : Location? =locationResult.getLastLocation()
             lat=mLastLocation?.latitude.toString()
             long=mLastLocation?.longitude.toString()
-            val geoCoder= Geocoder(requireContext())
-            val address=geoCoder.getFromLocation(mLastLocation!!.latitude,mLastLocation!!.longitude,1)
-            streetName=address.toString()
-
 
         }
     }

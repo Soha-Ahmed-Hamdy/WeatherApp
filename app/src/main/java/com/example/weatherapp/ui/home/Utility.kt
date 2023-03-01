@@ -1,5 +1,8 @@
 package com.example.weatherapp.ui.home
 
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherapp.R
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -7,6 +10,18 @@ import java.util.*
 
 class Utility {
 companion object{
+
+    val Language_EN_Value : String = "en"
+    val Language_AR_Value : String = "ar"
+    val Language_Key : String = "Lang"
+
+    fun saveLanguageToSharedPref(context: Context, key : String, value : String){
+        var editor : SharedPreferences.Editor = context.getSharedPreferences("Language",
+        AppCompatActivity.MODE_PRIVATE
+        ).edit()
+        editor.putString(key, value)
+        editor.apply()
+    }
     fun timeNameOfToDay(dt: Long) : String{
         var date: Date = Date(dt * 1000)
         var dateFormat : DateFormat = SimpleDateFormat("EEEE")

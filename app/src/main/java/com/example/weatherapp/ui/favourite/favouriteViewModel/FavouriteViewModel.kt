@@ -6,8 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.model.FavouritePlace
+import com.example.weatherapp.model.RoomState
 import com.example.weatherapp.repository.Repository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 
@@ -15,8 +20,8 @@ class FavouriteViewModel(context: Context) : ViewModel() {
 
     var repo = Repository
 
-    private var _favWeather=MutableLiveData<List<FavouritePlace>>()
-    val favWeather:LiveData<List<FavouritePlace>> = _favWeather
+    private var _favWeather= MutableStateFlow<RoomState>(RoomState.Loading)
+    val favWeather = _favWeather.asStateFlow()
 
 
 
@@ -26,14 +31,18 @@ class FavouriteViewModel(context: Context) : ViewModel() {
     }
     fun getFav(context: Context){
         viewModelScope.launch (Dispatchers.IO){
-            _favWeather.postValue(repo.getAllFavCountry(context))
+            repo.getAllFavCountry(context)
+                ?.catch {
+                    _favWeather.value=RoomState.Failure(it)
+                }?.collect{
+                    _favWeather.value=RoomState.Success(it)
+                }
         }
     }
 
     fun insertFav(context: Context, fav: FavouritePlace){
         viewModelScope.launch (Dispatchers.IO){
             repo.insertFavCountry(context,fav)
-            getFav(context)
         }
     }
 

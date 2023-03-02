@@ -17,6 +17,7 @@ import com.example.weatherapp.ui.favourite.favouriteViewModel.FavouriteViewModel
 
 class FavouritAdapter(private val locations: List<FavouritePlace?>
                       , var listener: (FavouritePlace) -> Unit
+                      , var listener2: (FavouritePlace) -> Unit
 
 ) : RecyclerView.Adapter<FavouritAdapter.ViewHolder>() {
 
@@ -35,12 +36,7 @@ class FavouritAdapter(private val locations: List<FavouritePlace?>
         holder.binding.cityName.text = locations[position]?.city
         holder.binding.countryName.text = locations[position]?.name
         holder.binding.deleteLoc.setOnClickListener { locations[position]?.let { it1 -> listener(it1) } }
-        holder.binding.allView.setOnClickListener {
-            var bundle :Bundle?= Bundle()
-            bundle?.putSerializable("favItem",locations[position])
-            Navigation.findNavController(it).navigate(R.id.favDetailsFragment,bundle)
-
-        }
+        holder.binding.allView.setOnClickListener { locations[position]?.let { it1 -> listener2(it1) } }
 
     }
 

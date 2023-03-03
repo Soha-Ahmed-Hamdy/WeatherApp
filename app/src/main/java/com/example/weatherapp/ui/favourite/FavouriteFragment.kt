@@ -96,14 +96,12 @@ class FavouriteFragment : Fragment() {
 
                     }
 
-                    else -> {}
                 }
             }
         }
 
         /* favouriteViewModel.favWeather.observe(viewLifecycleOwner) {
              favList=it
-
              var listener={
                      favPlace: FavouritePlace ->
                  favouriteViewModel.deleteFav(requireContext(),favPlace)
@@ -111,7 +109,6 @@ class FavouriteFragment : Fragment() {
              var listener2={
                      favPlace: FavouritePlace ->
                      if(favouriteViewModel.checkConnectivity(requireContext())){
-
                          var bundle :Bundle?= Bundle()
                          bundle?.putSerializable("favItem",favPlace)
                          Navigation.findNavController(root).navigate(R.id.favDetailsFragment,bundle)
@@ -121,9 +118,7 @@ class FavouriteFragment : Fragment() {
              }
              favAdapter=
                  FavouritAdapter(favList,listener,listener2)
-
              binding.favRecycler.adapter=favAdapter
-
          }*/
 
         return root

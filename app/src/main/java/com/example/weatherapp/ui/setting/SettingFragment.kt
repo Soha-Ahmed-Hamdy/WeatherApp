@@ -5,9 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherapp.databinding.FragmentSettingBinding
+import com.example.weatherapp.ui.home.Utility
 
 
 class SettingFragment : Fragment() {
@@ -26,15 +26,37 @@ class SettingFragment : Fragment() {
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textSetting
-        settingViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+        changeLanguage()
+
+
         return root
     }
+    private fun refreshFragment(){
+        fragmentManager?.beginTransaction()?.detach(this)?.attach(this)?.commit()
+    }
+    private fun changeLanguage(){
+        binding.radioGroup.setOnCheckedChangeListener {radioGroup, checkedButtonId ->
+            when{
+                checkedButtonId == binding.english.id -> {
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+                    Utility.saveLanguageToSharedPref(requireContext()
+                        , Utility.Language_Key, Utility.Language_EN_Value)
+                    LocaleManager.setLocale(requireContext())
+                    refreshFragment()
+
+                }
+                checkedButtonId == binding.arabic.id -> {
+
+                Utility.saveLanguageToSharedPref(requireContext()
+                    , Utility.Language_Key
+                    , Utility.Language_AR_Value)
+                LocaleManager.setLocale(requireContext())
+                refreshFragment()
+                    refreshFragment()
+
+            }
+            }
+
+        }
     }
 }

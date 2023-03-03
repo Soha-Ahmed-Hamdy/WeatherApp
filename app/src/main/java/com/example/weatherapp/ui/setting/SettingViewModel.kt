@@ -1,12 +1,19 @@
 package com.example.weatherapp.ui.setting
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import android.content.Context
+import com.example.weatherapp.repository.Repository
 
-class SettingViewModel:ViewModel() {
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is setting Fragment"
+class SettingViewModel (context : Context) :ViewModel() {
+    var repo = Repository
+
+
+    init {
+        getStates(context)
     }
-    val text: LiveData<String> = _text
+
+
+    fun getStates(context: Context){
+        repo.setupSharedPrefrences(context)
+    }
 }

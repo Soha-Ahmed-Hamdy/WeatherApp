@@ -24,6 +24,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.weatherapp.databinding.ActivityMainBinding
+import com.example.weatherapp.ui.setting.LocaleManager
 import com.google.android.gms.location.*
 
 class MainActivity : AppCompatActivity() {
@@ -34,6 +35,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        LocaleManager.setLocale(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

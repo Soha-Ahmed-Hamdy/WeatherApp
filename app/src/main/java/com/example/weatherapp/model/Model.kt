@@ -3,6 +3,9 @@ package com.example.weatherapp.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+import java.sql.Time
+import java.util.*
 
 
 @Entity
@@ -121,3 +124,24 @@ data class FavouritePlace (
     var favID: Int = 0
 
 }
+
+data class Alert(
+    val description: String,
+    val end: Int,
+    val event: String,
+    @SerializedName("sender_name")
+    val senderName: String,
+    val start: Int,
+    val tags: List<String>
+)
+
+@Entity
+data class LocalAlert(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo("id_alert")
+    val id:Long,
+    val time: String,
+    val end: String,
+    val zoneName: String,
+    val start: String,
+)

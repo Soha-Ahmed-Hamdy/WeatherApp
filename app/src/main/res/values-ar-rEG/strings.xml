@@ -40,4 +40,11 @@
     <string name="english">الانجليزية</string>
     <string name="kelvin">كلفن</string>
     <string name="fahrenheit">فهرنهايت</string>
+    <string name="cancel">الغاء</string>
+    <string name="open">فتح</string>
+    <string name="loading">جار التحميل ..!</string>
+    <string name="from">من: </string>
+    <string name="to">الي: </string>
+    <string name="time">التوقيت: </string>
+    <string name="zone">المدينة: </string>
 </resources>

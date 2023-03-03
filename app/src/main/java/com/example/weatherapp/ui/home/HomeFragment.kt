@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
@@ -22,13 +23,15 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
 import com.example.weatherapp.databinding.FragmentHomeBinding
 import com.example.weatherapp.model.ApiState
-import com.example.weatherapp.model.Current
-import com.example.weatherapp.model.Daily
+import com.example.weatherapp.model.FavouritePlace
+import com.example.weatherapp.repository.Repository
+import com.example.weatherapp.ui.Utility
 import com.example.weatherapp.ui.home.HomeViewModel.FactoryHomeWeather
 import com.example.weatherapp.ui.home.HomeViewModel.HomeViewModel
 import com.example.weatherapp.ui.home.homeAdapters.DayAdapter
 import com.example.weatherapp.ui.home.homeAdapters.HourAdapter
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -64,11 +67,12 @@ class HomeFragment : Fragment() {
 
         progressIndicator=binding.indicator
         countDownTime = binding.tvIndicator
-        countDownTime.text = "Loading..!!"
 
         fact= FactoryHomeWeather(requireContext(),lat,long)
         homeViewModel= ViewModelProvider(requireActivity(),fact).get(HomeViewModel::class.java)
         homeViewModel.getRootHome(requireContext(),lat,long)
+        homeViewModel.getStates(requireContext())
+        Utility.checkUnit()
 
 
         lifecycleScope.launch {
@@ -77,11 +81,16 @@ class HomeFragment : Fragment() {
                     is ApiState.Loading->{
                         disableViews()
                         delay(3000)
-                        countDownTime.text = "Loading..!!"
+
                     }
                     is ApiState.Success->{
 
-                        countDownTime.text = "Finished!!"
+                        if (Repository.language==Utility.Language_EN_Value){
+                            countDownTime.text = "Finished !!"
+                        }else{
+                            countDownTime.text = "تم التحميل"
+                        }
+
                         delay(10)
 
                         progressIndicator.visibility = View.GONE
@@ -93,15 +102,35 @@ class HomeFragment : Fragment() {
                         hourAdapter = HourAdapter(it.weatherRoot!!.hourly)
                         binding.recyclerHour.adapter=hourAdapter
 
-                        binding.humidityMeasure.text=it.weatherRoot!!.current!!.humidity.toString()+" %"
-                        binding.cloudMeasure.text=it.weatherRoot!!.current!!.clouds.toString()+" %"
-                        binding.windMeasure.text=it.weatherRoot!!.current!!.windSpeed.toString()+" m/s"
-                        binding.pressureMeasure.text=it.weatherRoot!!.current!!.pressure.toString()+" hpa"
-                        binding.violateMeasure.text=it.weatherRoot!!.current!!.uvi.toString()
-                        binding.visibilityMeasure.text=it.weatherRoot!!.current!!.visibility.toString()+" m"
-                        binding.todayTemp.text=it.weatherRoot!!.current!!.temp.toInt().toString()+ " °C"
-                        binding.todayImg.setImageResource(Utility.getWeatherStatusIcon(it.weatherRoot!!.current!!.weather[0].icon))
-                        binding.weatherMood.text=it.weatherRoot!!.current!!.weather[0].description
+                        if(Repository.language == Utility.Language_EN_Value){
+                            binding.humidityMeasure.text=it.weatherRoot!!.current!!.humidity.toString()+" %"
+                            binding.cloudMeasure.text=it.weatherRoot!!.current!!.clouds.toString()+" %"
+                            binding.windMeasure.text=it.weatherRoot!!.current!!.windSpeed.toString()+" m/s"
+                            binding.pressureMeasure.text=it.weatherRoot!!.current!!.pressure.toString()+" hpa"
+                            binding.violateMeasure.text=it.weatherRoot!!.current!!.uvi.toString()
+                            binding.visibilityMeasure.text=it.weatherRoot!!.current!!.visibility.toString()+" m"
+                            binding.todayTemp.text=it.weatherRoot!!.current!!.temp.toInt().toString()+ Utility.checkUnit()
+                            binding.todayImg.setImageResource(Utility.getWeatherStatusIcon(it.weatherRoot!!.current!!.weather[0].icon))
+                            binding.weatherMood.text=it.weatherRoot!!.current!!.weather[0].description
+                            binding.cityName.text=it.weatherRoot.timezone
+
+                        }
+                        else if(Repository.language == Utility.Language_AR_Value){
+                            binding.humidityMeasure.text = Utility.convertNumbersToArabic(it.weatherRoot!!.current!!.humidity)+"٪ "
+                            binding.cloudMeasure.text = Utility.convertNumbersToArabic(it.weatherRoot!!.current!!.clouds)+"٪ "
+                            binding.windMeasure.text = Utility.convertNumbersToArabic(it.weatherRoot!!.current!!.windSpeed)+" م/ث"
+                            binding.pressureMeasure.text = Utility.convertNumbersToArabic(it.weatherRoot!!.current!!.pressure)+" هيكتوباسكال"
+                            binding.violateMeasure.text = Utility.convertNumbersToArabic(it.weatherRoot!!.current!!.uvi)
+                            binding.visibilityMeasure.text = Utility.convertNumbersToArabic(it.weatherRoot!!.current!!.visibility)+" م"
+                            binding.todayTemp.text=
+                                Utility.convertNumbersToArabic(it.weatherRoot!!.current!!.temp.toInt())+ Utility.checkUnit()
+                            binding.todayImg.setImageResource(Utility.getWeatherStatusIcon(it.weatherRoot!!.current!!.weather[0].icon))
+                            binding.weatherMood.text = it.weatherRoot!!.current!!.weather[0].description
+                            binding.cityName.text=it.weatherRoot.timezone
+
+
+                        }
+
                         delay(5)
                         initViews()
 
@@ -176,7 +205,7 @@ class HomeFragment : Fragment() {
     private fun requestNewLocationData(){
         val mLocationRequest = LocationRequest()
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-        mLocationRequest.setInterval(0)
+        mLocationRequest.setInterval(300000)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         mFusedLocationClient.requestLocationUpdates(
             mLocationRequest, mLocationCallback,
@@ -189,6 +218,11 @@ class HomeFragment : Fragment() {
             val mLastLocation : Location? =locationResult.getLastLocation()
             lat= mLastLocation?.latitude!!
             long=mLastLocation?.longitude!!
+            if(Repository.location==Utility.GPS){
+                saveLatLong(lat.toLong(),long.toLong())
+            }
+
+            mFusedLocationClient.removeLocationUpdates(this)
 
         }
     }
@@ -202,6 +236,11 @@ class HomeFragment : Fragment() {
     fun initViews(){
         binding.moreDetailsCard.visibility = View.VISIBLE
         binding.todayForcastCard.visibility = View.VISIBLE
+
+    }
+    fun saveLatLong(lat : Long,long:Long){
+        Utility.saveLatitudeToSharedPref(requireContext(), Utility.LATITUDE_KEY,lat)
+        Utility.saveLongitudeToSharedPref(requireContext(), Utility.LONGITUDE_KEY, long)
 
     }
 

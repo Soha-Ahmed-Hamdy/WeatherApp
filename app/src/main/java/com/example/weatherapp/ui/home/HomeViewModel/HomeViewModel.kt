@@ -19,6 +19,10 @@ class HomeViewModel(context: Context,lat: Double,long: Double) : ViewModel() {
 
     init {
         getRootHome(context, lat, long)
+        getStates(context)
+    }
+    fun getStates(context: Context){
+        repo.setupSharedPrefrences(context)
     }
 
     fun getRootHome(context: Context,lat: Double,long: Double)=

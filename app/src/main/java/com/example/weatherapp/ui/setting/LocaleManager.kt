@@ -6,13 +6,9 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
-import android.os.Build.VERSION_CODES.N
-import android.os.LocaleList
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.example.weatherapp.ui.home.Utility
+import com.example.weatherapp.ui.Utility
 import java.util.*
-import kotlin.collections.LinkedHashSet
 
 class LocaleManager {
 
@@ -43,6 +39,7 @@ class LocaleManager {
         fun persistLanguage(context: Context , language: String){
             Utility.saveLanguageToSharedPref(context, Utility.Language_Key, language)
         }
+
         @SuppressLint("ObsoleteSdkInt")
         fun updateResources(context: Context, language: String){
             var locale : Locale = Locale(language)
@@ -59,5 +56,6 @@ class LocaleManager {
 
             resources.updateConfiguration(config, resources.displayMetrics)
         }
+
     }
 }

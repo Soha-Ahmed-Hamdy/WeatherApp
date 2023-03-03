@@ -1,4 +1,4 @@
-package com.example.weatherapp.ui
+package com.example.weatherapp.ui.locationMap
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -12,16 +12,20 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.example.weatherapp.R
+import com.example.weatherapp.databinding.FragmentHomeBinding
+import com.example.weatherapp.databinding.FragmentLocationMapBinding
 import com.example.weatherapp.model.FavouritePlace
+import com.example.weatherapp.ui.Utility
 import com.example.weatherapp.ui.favourite.favouriteViewModel.FactoryFavouriteWeather
 import com.example.weatherapp.ui.favourite.favouriteViewModel.FavouriteViewModel
 import com.example.weatherapp.ui.home.PERMISSION_ID
@@ -39,18 +43,22 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 
 
-class MapFragment : Fragment(), OnMapReadyCallback {
+class LocationMapFragment : Fragment() , OnMapReadyCallback {
     lateinit var mMap: GoogleMap
     lateinit var mFusedLocationClient: FusedLocationProviderClient
-    lateinit var fact: FactoryFavouriteWeather
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        return inflater.inflate(R.layout.fragment_map, container, false)
+        return inflater.inflate(R.layout.fragment_location_map, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -97,7 +105,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         getLastMLocation()
         mMap = googleMap
-
 
     }
 
@@ -158,7 +165,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun requestNewLocationData(){
         val mLocationRequest = LocationRequest()
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-        mLocationRequest.setInterval(400000)
+        mLocationRequest.setInterval(200000)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         mFusedLocationClient.requestLocationUpdates(
             mLocationRequest, mLocationCallback,
@@ -180,35 +187,29 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10f))
 
-            mMap.setOnMapLongClickListener {
-                    latLng ->    mMap.addMarker(
-                        MarkerOptions()
-                        .position(latLng)
-                        .title("My Location")
+            mMap.setOnMapLongClickListener { latLng ->    mMap.addMarker(
+                MarkerOptions().position(latLng).title("My Location")
 
             )
                 val geoCoder = Geocoder(requireContext())
                 val address = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-                checkSaveToFavorite(FavouritePlace(latLng.latitude,latLng.longitude,address?.get(0)?.countryName.toString(),address?.get(0)?.adminArea.toString()),address?.get(0)?.countryName.toString())
+                confirmDesiredLocation(latLng.latitude,latLng.longitude,address?.get(0)?.adminArea.toString())
             }
 
         }
     }
 
-    fun checkSaveToFavorite(favouritePlace: FavouritePlace,placeName: String) {
+    fun confirmDesiredLocation(lat: Double,long: Double, placeName: String) {
         val alert: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
 
-        alert.setTitle("Favorite")
+        alert.setTitle("Confirm Location")
 
-        alert.setMessage("Do You want to save ${placeName} to your favorite")
+        alert.setMessage("Do You want ${placeName} to be current Location")
         alert.setPositiveButton("Save") {
                 _: DialogInterface, _: Int ->
-
-            fact= FactoryFavouriteWeather(requireContext())
-
-            var favouriteViewModel= ViewModelProvider(requireActivity(),fact).get(FavouriteViewModel::class.java)
-
-            favouriteViewModel.insertFav(requireContext(), favouritePlace)
+            saveLatLong(lat.toLong(),long.toLong())
+            Navigation.findNavController(requireView())
+                .navigate(R.id.nav_home)
 
             Toast.makeText(requireContext()
                 , "Data has been saved"
@@ -218,6 +219,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         dialog.show()
 
     }
+fun saveLatLong(lat : Long,long:Long){
+    Utility.saveLatitudeToSharedPref(requireContext(), Utility.LATITUDE_KEY,lat)
+    Utility.saveLongitudeToSharedPref(requireContext(), Utility.LONGITUDE_KEY, long)
+
+}
 
 
 }

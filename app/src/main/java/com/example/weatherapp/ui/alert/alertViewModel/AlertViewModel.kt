@@ -1,60 +1,58 @@
-package com.example.weatherapp.ui.favourite.favouriteViewModel
+package com.example.weatherapp.ui.alert.alertViewModel
 
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherapp.model.FavouritePlace
-import com.example.weatherapp.model.RoomState
+import com.example.weatherapp.model.*
 import com.example.weatherapp.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-
-class FavouriteViewModel(context: Context) : ViewModel() {
+class AlertViewModel(context: Context)  : ViewModel() {
 
     var repo = Repository
 
-    private var _favWeather= MutableStateFlow<RoomState>(RoomState.Loading)
-    val favWeather = _favWeather.asStateFlow()
+    private var _alert= MutableStateFlow<AlertState>(AlertState.Loading)
+    val alert = _alert.asStateFlow()
 
 
 
     init {
-        getFav(context)
+        getAlerts(context)
 
     }
-    fun getFav(context: Context){
+    fun getAlerts(context: Context){
         viewModelScope.launch (Dispatchers.IO){
-            repo.getAllFavCountry(context)
+            repo.getAllAlerts(context)
                 ?.catch {
-                    _favWeather.value=RoomState.Failure(it)
+                    _alert.value= AlertState.Failure(it)
                 }?.collect{
-                    _favWeather.value=RoomState.Success(it)
+                    _alert.value= AlertState.Success(it)
                 }
         }
     }
 
-    fun insertFav(context: Context, fav: FavouritePlace){
+    fun insertAlert(context: Context, alert: LocalAlert){
         viewModelScope.launch (Dispatchers.IO){
-            repo.insertFavCountry(context,fav)
+            repo.insertAlert(context,alert)
         }
     }
 
-    fun deleteFav(context: Context, fav: FavouritePlace){
+    fun deleteAlert(context: Context, alert: LocalAlert){
         viewModelScope.launch (Dispatchers.IO){
-            repo.deleteFavCountry(context,fav)
-            getFav(context)
+            repo.deleteAlert(context,alert)
+            getAlerts(context)
         }
     }
 
     fun checkConnectivity(context: Context):Boolean{
         return repo.checkForInternet(context)
     }
+
 
 }

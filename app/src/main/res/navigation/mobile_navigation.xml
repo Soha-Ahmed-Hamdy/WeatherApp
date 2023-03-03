@@ -44,4 +44,18 @@
             android:name="favItem"
             app:argType="com.example.weatherapp.model.FavouritePlace" />
     </fragment>
+    <fragment
+        android:id="@+id/locationMapFragment"
+        android:name="com.example.weatherapp.ui.locationMap.LocationMapFragment"
+        android:label="LocationMapFragment" />
+    <dialog
+        android:id="@+id/alertSpecificationFragment"
+        android:name="com.example.weatherapp.ui.AlertSpecificationFragment"
+        android:label="fragment_alert_specification"
+        tools:layout="@layout/fragment_alert_specification" />
+    <dialog
+        android:id="@+id/dialogAlertFragment"
+        android:name="com.example.weatherapp.ui.dialogAlertFragment.DialogAlertFragment"
+        android:label="fragment_dialog_alert"
+        tools:layout="@layout/fragment_dialog_alert" />
 </navigation>

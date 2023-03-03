@@ -6,19 +6,19 @@ import com.example.weatherapp.model.*
 
 
 
-@Database(entities = [Root::class
-//    ,CurrentData::class
+@Database(entities = [
+    Root::class
     ,FavouritePlace::class
-//    ,DailyData::class
-//    ,WeatherData::class
-//    ,TempData::class
-                     ],version = 1)
+    ,LocalAlert::class
+                     ]
+    ,version = 2)
 
 @TypeConverters(Converter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun favouritePlaceDAO(): favouritePlaceDAO?
     abstract fun homeDAO(): HomeDao?
+    abstract fun alertDAO(): AlertDAO?
 
     companion object {
         private var INSTANCE: AppDatabase? = null

@@ -1,10 +1,9 @@
-package com.example.weatherapp.model
+package com.example.weatherapp.data.utils
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherapp.R
-import com.example.weatherapp.model.repository.Repository
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -30,7 +29,7 @@ companion object{
 
     fun checkUnit():String{
             val tempMeasure:String
-            if(SharedPrefData.language== Language_EN_Value){
+            if(SharedPrefData.language == Language_EN_Value){
                 tempMeasure = when (SharedPrefData.unit) {
                     IMPERIAL -> {
                         " °F"

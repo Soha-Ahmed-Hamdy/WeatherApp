@@ -10,7 +10,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherapp.databinding.ActivityMainBinding
-import com.example.weatherapp.model.LocaleManager
+import com.example.weatherapp.data.utils.LocaleManager
 
 class MainActivity : AppCompatActivity() {
 

@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.weatherapp.R
-import com.example.weatherapp.model.Current
-import com.example.weatherapp.model.Daily
+import com.example.weatherapp.data.model.Current
+import com.example.weatherapp.data.model.Daily
 
 
 class HomeRecyclerAdapter(
@@ -16,7 +16,7 @@ class HomeRecyclerAdapter(
     private var day: List<Daily>)
     : RecyclerView.Adapter<ViewHolder>() {
 
-    lateinit var currentDay:Current
+    lateinit var currentDay: Current
     lateinit var hourList: List<Current>
     lateinit var dayList: List<Daily>
 

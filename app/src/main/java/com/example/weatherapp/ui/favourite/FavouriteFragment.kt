@@ -13,12 +13,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentFavouriteBinding
-import com.example.weatherapp.model.*
-import com.example.weatherapp.model.repository.Repository
+import com.example.weatherapp.data.model.FavouritePlace
+import com.example.weatherapp.data.repository.Repository
+import com.example.weatherapp.data.utils.RoomState
+import com.example.weatherapp.data.utils.SharedPrefData
 import com.example.weatherapp.ui.favourite.favouriteViewModel.FactoryFavouriteWeather
 import com.example.weatherapp.ui.favourite.favAdapters.FavouritAdapter
 import com.example.weatherapp.ui.favourite.favouriteViewModel.FavouriteViewModel
-import com.example.weatherapp.model.Utility
+import com.example.weatherapp.data.utils.Utility
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -45,7 +47,7 @@ class FavouriteFragment : Fragment() {
         _binding = FragmentFavouriteBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val repository = Repository(requireContext())
+        val repository = Repository.getRepositoryInstance(requireActivity().application)
 
         fact = FactoryFavouriteWeather(repository)
         favouriteViewModel =

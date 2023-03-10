@@ -2,8 +2,8 @@ package com.example.weatherapp.ui.favDetails.favDetailsViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherapp.model.ApiState
-import com.example.weatherapp.model.repository.Repository
+import com.example.weatherapp.data.utils.ApiState
+import com.example.weatherapp.data.repository.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch

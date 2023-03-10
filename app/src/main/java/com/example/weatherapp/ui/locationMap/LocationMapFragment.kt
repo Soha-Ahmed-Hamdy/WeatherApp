@@ -21,7 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.navigation.Navigation
 import com.example.weatherapp.R
-import com.example.weatherapp.model.Utility
+import com.example.weatherapp.data.utils.Utility
 import com.example.weatherapp.ui.home.PERMISSION_ID
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*

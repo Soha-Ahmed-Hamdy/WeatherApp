@@ -2,8 +2,8 @@ package com.example.weatherapp.ui.home.HomeViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherapp.model.*
-import com.example.weatherapp.model.repository.Repository
+import com.example.weatherapp.data.repository.Repository
+import com.example.weatherapp.data.utils.ApiState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

@@ -1,7 +1,7 @@
-package com.example.weatherapp.database
+package com.example.weatherapp.data.database
 
 import androidx.room.*
-import com.example.weatherapp.model.LocalAlert
+import com.example.weatherapp.data.model.LocalAlert
 import kotlinx.coroutines.flow.Flow
 
 @Dao

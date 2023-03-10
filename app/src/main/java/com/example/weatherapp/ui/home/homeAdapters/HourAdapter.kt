@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.databinding.HourItemBinding
-import com.example.weatherapp.model.Current
-import com.example.weatherapp.model.SharedPrefData
-import com.example.weatherapp.model.Utility
+import com.example.weatherapp.data.model.Current
+import com.example.weatherapp.data.utils.SharedPrefData
+import com.example.weatherapp.data.utils.Utility
 
 class HourAdapter(
     private val hour: List<Current>

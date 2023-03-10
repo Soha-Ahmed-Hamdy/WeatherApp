@@ -61,7 +61,7 @@
         android:label="Favourite City Weather" >
         <argument
             android:name="favItem"
-            app:argType="com.example.weatherapp.model.FavouritePlace" />
+            app:argType="com.example.weatherapp.data.model.FavouritePlace" />
         <action
             android:id="@+id/action_favDetailsFragment_to_nav_favourite"
             app:destination="@id/nav_favourite"

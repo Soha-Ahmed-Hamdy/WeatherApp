@@ -21,10 +21,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
 import com.example.weatherapp.databinding.FragmentHomeBinding
-import com.example.weatherapp.model.ApiState
-import com.example.weatherapp.model.SharedPrefData
-import com.example.weatherapp.model.repository.Repository
-import com.example.weatherapp.model.Utility
+import com.example.weatherapp.data.utils.ApiState
+import com.example.weatherapp.data.utils.SharedPrefData
+import com.example.weatherapp.data.repository.Repository
+import com.example.weatherapp.data.utils.Utility
 import com.example.weatherapp.ui.home.HomeViewModel.FactoryHomeWeather
 import com.example.weatherapp.ui.home.HomeViewModel.HomeViewModel
 import com.example.weatherapp.ui.home.homeAdapters.DayAdapter
@@ -66,7 +66,7 @@ class HomeFragment : Fragment() {
         progressIndicator=binding.indicator
         countDownTime = binding.tvIndicator
 
-        var repository=Repository(requireContext())
+        var repository=Repository.getRepositoryInstance(requireActivity().application)
 
         fact= FactoryHomeWeather(repository)
         homeViewModel= ViewModelProvider(requireActivity(),fact).get(HomeViewModel::class.java)

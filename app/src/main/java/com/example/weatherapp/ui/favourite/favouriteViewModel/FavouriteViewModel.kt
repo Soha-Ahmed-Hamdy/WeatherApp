@@ -3,9 +3,9 @@ package com.example.weatherapp.ui.favourite.favouriteViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherapp.model.FavouritePlace
-import com.example.weatherapp.model.RoomState
-import com.example.weatherapp.model.repository.Repository
+import com.example.weatherapp.data.model.FavouritePlace
+import com.example.weatherapp.data.utils.RoomState
+import com.example.weatherapp.data.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,9 +26,9 @@ class FavouriteViewModel(var repository : Repository) : ViewModel() {
         viewModelScope.launch (Dispatchers.IO){
             repository.getAllFavCountry()
                 ?.catch {
-                    _favWeather.value=RoomState.Failure(it)
+                    _favWeather.value= RoomState.Failure(it)
                 }?.collect{
-                    _favWeather.value=RoomState.Success(it)
+                    _favWeather.value= RoomState.Success(it)
                 }
         }
     }

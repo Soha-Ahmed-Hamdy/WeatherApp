@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.databinding.AlertSavedItemBinding
-import com.example.weatherapp.model.LocalAlert
-import com.example.weatherapp.model.Utility
+import com.example.weatherapp.data.model.LocalAlert
+import com.example.weatherapp.data.utils.Utility
 
 class AlertAdapter(private val alerts: List<LocalAlert>
                       , var listener: (LocalAlert) -> Unit

@@ -10,9 +10,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentAlertSpecificationBinding
-import com.example.weatherapp.model.LocalAlert
-import com.example.weatherapp.model.Utility
-import com.example.weatherapp.model.repository.Repository
+import com.example.weatherapp.data.model.LocalAlert
+import com.example.weatherapp.data.utils.Utility
+import com.example.weatherapp.data.repository.Repository
 import com.example.weatherapp.ui.alert.alertViewModel.AlertViewModel
 import com.example.weatherapp.ui.alert.alertViewModel.FactoryAlert
 import java.util.*
@@ -49,7 +49,7 @@ class AlertSpecificationFragment : DialogFragment() {
         _binding = FragmentAlertSpecificationBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val repository = Repository(requireContext())
+        val repository = Repository.getRepositoryInstance(requireActivity().application)
 
         fact = FactoryAlert(repository)
         alertViewModel =
@@ -87,14 +87,16 @@ class AlertSpecificationFragment : DialogFragment() {
             onClickTime()
         }
         binding.saveAlert.setOnClickListener {
-            alertViewModel.insertAlert(LocalAlert(
+            alertViewModel.insertAlert(
+                LocalAlert(
                 time,
                 endDate,
                 binding.zonePicker.text.toString(),
                 startDate,
                 lat.toDouble(),
                 long.toDouble()
-                ))
+                )
+            )
             NavHostFragment.findNavController(this).popBackStack()
         }
         binding.zonePicker.setOnClickListener {

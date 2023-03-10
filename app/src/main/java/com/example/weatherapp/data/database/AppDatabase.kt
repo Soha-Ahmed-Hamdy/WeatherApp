@@ -1,15 +1,18 @@
-package com.example.weatherapp.database
+package com.example.weatherapp.data.database
 
 import android.content.Context
 import androidx.room.*
-import com.example.weatherapp.model.*
-
+import com.example.weatherapp.data.*
+import com.example.weatherapp.data.model.FavouritePlace
+import com.example.weatherapp.data.model.LocalAlert
+import com.example.weatherapp.data.model.Root
+import com.example.weatherapp.data.utils.Converter
 
 
 @Database(entities = [
     Root::class
-    ,FavouritePlace::class
-    ,LocalAlert::class
+    , FavouritePlace::class
+    , LocalAlert::class
                      ]
     ,version = 1,
 exportSchema = false)
@@ -17,14 +20,14 @@ exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun favouritePlaceDAO(): favouritePlaceDAO?
-    abstract fun homeDAO(): HomeDao?
-    abstract fun alertDAO(): AlertDAO?
+    abstract fun favouritePlaceDAO(): favouritePlaceDAO
+    abstract fun homeDAO(): HomeDao
+    abstract fun alertDAO(): AlertDAO
 
     companion object {
         private var INSTANCE: AppDatabase? = null
         @Synchronized
-        fun getInstance(context: Context): AppDatabase? {
+        fun getInstance(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext, AppDatabase::class.java, "fav_country_database")

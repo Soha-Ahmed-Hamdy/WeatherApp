@@ -1,5 +1,4 @@
-package com.example.weatherapp.model
-import androidx.room.*
+package com.example.weatherapp.data.utils
 
 
 //@Entity

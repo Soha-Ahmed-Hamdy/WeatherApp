@@ -1,7 +1,4 @@
-package com.example.weatherapp.database
-
-import androidx.room.*
-import com.example.weatherapp.model.*
+package com.example.weatherapp.data.database
 
 //@Dao
 //interface WeatherDAO {

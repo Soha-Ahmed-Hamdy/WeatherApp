@@ -1,10 +1,9 @@
-package com.example.weatherapp.model
+package com.example.weatherapp.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import java.sql.Time
 import java.util.*
 
 
@@ -13,15 +12,15 @@ data class Root (
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo("id_root")
-    val id:Long,
-    val lat: Double,
-    val lon: Double,
-    val timezone: String,
-    val timezoneOffset: Long,
+    val id:Long?=null,
+    val lat: Double?=null,
+    val lon: Double?=null,
+    val timezone: String?=null,
+    val timezoneOffset: Long?=null,
     val current: Current?=null,
-    val hourly: List<Current>,
-    val daily: List<Daily>,
-    val alerts: List<Alert>
+    val hourly: List<Current> = emptyList(),
+    val daily: List<Daily> = emptyList(),
+    val alerts: List<Alert> = emptyList()
 )
 
 

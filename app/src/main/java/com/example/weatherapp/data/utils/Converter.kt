@@ -1,7 +1,11 @@
-package com.example.weatherapp.model
+package com.example.weatherapp.data.utils
 
 import android.icu.util.Calendar
 import androidx.room.TypeConverter
+import com.example.weatherapp.data.model.Alert
+import com.example.weatherapp.data.model.Current
+import com.example.weatherapp.data.model.Daily
+import com.example.weatherapp.data.model.Weather
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

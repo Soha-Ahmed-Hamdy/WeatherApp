@@ -21,8 +21,8 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherapp.R
-import com.example.weatherapp.model.FavouritePlace
-import com.example.weatherapp.model.repository.Repository
+import com.example.weatherapp.data.model.FavouritePlace
+import com.example.weatherapp.data.repository.Repository
 import com.example.weatherapp.ui.favourite.favouriteViewModel.FactoryFavouriteWeather
 import com.example.weatherapp.ui.favourite.favouriteViewModel.FavouriteViewModel
 import com.example.weatherapp.ui.home.PERMISSION_ID
@@ -195,7 +195,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         }
     }
-    fun checkSaveToFavorite(favouritePlace: FavouritePlace,placeName: String) {
+    fun checkSaveToFavorite(favouritePlace: FavouritePlace, placeName: String) {
         val alert: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
 
         alert.setTitle("Favorite")
@@ -204,7 +204,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         alert.setPositiveButton("Save") {
                 _: DialogInterface, _: Int ->
 
-            val repository = Repository(requireContext())
+            val repository = Repository.getRepositoryInstance(requireActivity().application)
 
             fact= FactoryFavouriteWeather(repository)
 

@@ -12,11 +12,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
 import com.example.weatherapp.databinding.FragmentFavDetailsBinding
-import com.example.weatherapp.model.*
-import com.example.weatherapp.model.repository.Repository
+import com.example.weatherapp.data.model.Current
+import com.example.weatherapp.data.model.FavouritePlace
+import com.example.weatherapp.data.repository.Repository
 import com.example.weatherapp.ui.favDetails.favDetailsViewModel.FactoryFavDetails
 import com.example.weatherapp.ui.favDetails.favDetailsViewModel.FavouriteDetailsViewModel
-import com.example.weatherapp.model.Utility
+import com.example.weatherapp.data.utils.Utility
+import com.example.weatherapp.data.utils.ApiState
+import com.example.weatherapp.data.utils.SharedPrefData
 import com.example.weatherapp.ui.home.homeAdapters.DayAdapter
 import com.example.weatherapp.ui.home.homeAdapters.HourAdapter
 import kotlinx.coroutines.delay
@@ -56,7 +59,7 @@ class FavDetailsFragment : Fragment() {
         progressIndicator=binding.indicator
         countDownTime = binding.tvIndicator
 
-        val repository = Repository(requireContext())
+        val repository = Repository.getRepositoryInstance(requireActivity().application)
 
         fact= FactoryFavDetails(repository, favItemData.lat, favItemData.lon)
         favDetailsViewModel= ViewModelProvider(requireActivity(),fact).get(FavouriteDetailsViewModel::class.java)

@@ -20,13 +20,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import com.bumptech.glide.Priority
-import com.example.weatherapp.AlertBroadCastReceiver
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentAlertBinding
-import com.example.weatherapp.model.AlertState
-import com.example.weatherapp.model.LocalAlert
-import com.example.weatherapp.model.repository.Repository
+import com.example.weatherapp.data.utils.AlertState
+import com.example.weatherapp.data.model.LocalAlert
+import com.example.weatherapp.data.repository.Repository
 import com.example.weatherapp.ui.alert.alertAdapter.AlertAdapter
 import com.example.weatherapp.ui.alert.alertViewModel.AlertViewModel
 import com.example.weatherapp.ui.alert.alertViewModel.FactoryAlert
@@ -51,7 +49,7 @@ class AlertFragment : Fragment() {
         _binding = FragmentAlertBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val repository = Repository(requireContext())
+        val repository = Repository.getRepositoryInstance(requireActivity().application)
 
         fact = FactoryAlert(repository)
         alertViewModel =

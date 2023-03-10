@@ -10,10 +10,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentSettingBinding
-import com.example.weatherapp.model.LocaleManager
-import com.example.weatherapp.model.SharedPrefData
-import com.example.weatherapp.model.repository.Repository
-import com.example.weatherapp.model.Utility
+import com.example.weatherapp.data.utils.LocaleManager
+import com.example.weatherapp.data.utils.SharedPrefData
+import com.example.weatherapp.data.repository.Repository
+import com.example.weatherapp.data.utils.Utility
 
 
 class SettingFragment : Fragment() {
@@ -34,7 +34,7 @@ class SettingFragment : Fragment() {
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
         root = binding.root
 
-        repository = Repository(requireContext())
+        repository = Repository.getRepositoryInstance(requireActivity().application)
 
         checkRadioButtons()
         changeLanguage()

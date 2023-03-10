@@ -19,23 +19,42 @@
         <action
             android:id="@+id/action_nav_favourite_to_mapFragment"
             app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_nav_favourite_to_nav_home"
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/nav_home" />
     </fragment>
 
     <fragment
         android:id="@+id/nav_alert"
         android:name="com.example.weatherapp.ui.alert.AlertFragment"
         android:label="@string/alerts"
-        tools:layout="@layout/fragment_alert" />
+        tools:layout="@layout/fragment_alert" >
+        <action
+            android:id="@+id/action_nav_alert_to_nav_home"
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/nav_home" />
+    </fragment>
     <fragment
         android:id="@+id/nav_setting"
         android:name="com.example.weatherapp.ui.setting.SettingFragment"
         android:label="@string/setting"
-        tools:layout="@layout/fragment_setting" />
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_nav_setting_to_nav_home"
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/nav_home" />
+    </fragment>
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.example.weatherapp.ui.MapFragment"
         android:label="Map"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_mapFragment_to_nav_favourite"
+            app:destination="@id/nav_favourite"
+            app:popUpTo="@id/nav_favourite" />
+    </fragment>
     <fragment
         android:id="@+id/favDetailsFragment"
         android:name="com.example.weatherapp.ui.favouriteDetails.FavDetailsFragment"
@@ -43,19 +62,41 @@
         <argument
             android:name="favItem"
             app:argType="com.example.weatherapp.model.FavouritePlace" />
+        <action
+            android:id="@+id/action_favDetailsFragment_to_nav_favourite"
+            app:destination="@id/nav_favourite"
+            app:popUpTo="@id/nav_favourite" />
     </fragment>
     <fragment
         android:id="@+id/locationMapFragment"
         android:name="com.example.weatherapp.ui.locationMap.LocationMapFragment"
-        android:label="LocationMapFragment" />
-    <dialog
-        android:id="@+id/alertSpecificationFragment"
-        android:name="com.example.weatherapp.ui.AlertSpecificationFragment"
-        android:label="fragment_alert_specification"
-        tools:layout="@layout/fragment_alert_specification" />
+        android:label="LocationMapFragment" >
+        <action
+            android:id="@+id/action_locationMapFragment_to_nav_setting"
+            app:destination="@id/nav_setting"
+            app:popUpTo="@id/nav_setting" />
+    </fragment>
     <dialog
         android:id="@+id/dialogAlertFragment"
         android:name="com.example.weatherapp.ui.dialogAlertFragment.DialogAlertFragment"
         android:label="fragment_dialog_alert"
         tools:layout="@layout/fragment_dialog_alert" />
+    <dialog
+        android:id="@+id/alertSpecificationFragment3"
+        android:name="com.example.weatherapp.ui.AlertSpecificationFragment"
+        android:label="AlertSpecificationFragment" >
+        <action
+            android:id="@+id/action_alertSpecificationFragment3_to_nav_alert"
+            app:destination="@id/nav_alert"
+            app:popUpTo="@id/nav_alert" />
+    </dialog>
+    <dialog
+        android:id="@+id/selectMapFragment2"
+        android:name="com.example.weatherapp.ui.selectMap.SelectMapFragment"
+        android:label="SelectMapFragment" >
+        <action
+            android:id="@+id/action_selectMapFragment2_to_alertSpecificationFragment3"
+            app:destination="@id/alertSpecificationFragment3"
+            app:popUpTo="@id/alertSpecificationFragment3" />
+    </dialog>
 </navigation>

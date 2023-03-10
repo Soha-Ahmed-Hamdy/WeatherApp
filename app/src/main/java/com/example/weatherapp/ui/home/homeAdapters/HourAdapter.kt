@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.databinding.HourItemBinding
 import com.example.weatherapp.model.Current
-import com.example.weatherapp.repository.Repository
-import com.example.weatherapp.ui.Utility
+import com.example.weatherapp.model.SharedPrefData
+import com.example.weatherapp.model.Utility
 
 class HourAdapter(
     private val hour: List<Current>
@@ -25,7 +25,7 @@ class HourAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        if(Repository.language == Utility.Language_EN_Value){
+        if(SharedPrefData.language == Utility.Language_EN_Value){
             holder.binding.timeTemp.text =
                 hour[position].temp.toInt().toString()+ Utility.checkUnit()
             holder.binding.currentTime.text = Utility.timeStampToHour(hour[position].dt)

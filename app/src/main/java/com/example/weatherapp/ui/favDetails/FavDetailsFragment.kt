@@ -12,29 +12,23 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
 import com.example.weatherapp.databinding.FragmentFavDetailsBinding
-import com.example.weatherapp.model.ApiState
-import com.example.weatherapp.model.Current
-import com.example.weatherapp.model.Daily
-import com.example.weatherapp.model.FavouritePlace
-import com.example.weatherapp.repository.Repository
+import com.example.weatherapp.model.*
+import com.example.weatherapp.model.repository.Repository
 import com.example.weatherapp.ui.favDetails.favDetailsViewModel.FactoryFavDetails
 import com.example.weatherapp.ui.favDetails.favDetailsViewModel.FavouriteDetailsViewModel
-import com.example.weatherapp.ui.Utility
+import com.example.weatherapp.model.Utility
 import com.example.weatherapp.ui.home.homeAdapters.DayAdapter
 import com.example.weatherapp.ui.home.homeAdapters.HourAdapter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-
 class FavDetailsFragment : Fragment() {
 
     private var _binding: FragmentFavDetailsBinding? = null
     lateinit var fact: FactoryFavDetails
     lateinit var dayAdapter: DayAdapter
-    private lateinit var dayList: List<Daily?>
     lateinit var hourAdapter: HourAdapter
-    private lateinit var hourList: List<Current?>
     lateinit var currentDayWeather: Current
     lateinit var lat:String
     lateinit var favItemData: FavouritePlace
@@ -61,9 +55,12 @@ class FavDetailsFragment : Fragment() {
         }
         progressIndicator=binding.indicator
         countDownTime = binding.tvIndicator
-        fact= FactoryFavDetails(requireContext(),favItemData.lat,favItemData.lon)
+
+        val repository = Repository(requireContext())
+
+        fact= FactoryFavDetails(repository, favItemData.lat, favItemData.lon)
         favDetailsViewModel= ViewModelProvider(requireActivity(),fact).get(FavouriteDetailsViewModel::class.java)
-        favDetailsViewModel.getFavRootDetails(requireContext(),favItemData.lat,favItemData.lon)
+        favDetailsViewModel.getFavRootDetails(favItemData.lat,favItemData.lon)
 
 
         //lottie : https://assets6.lottiefiles.com/packages/lf20_ahY2hu.json
@@ -72,14 +69,12 @@ class FavDetailsFragment : Fragment() {
             favDetailsViewModel.stateFlow.collectLatest {
                 when (it){
                     is ApiState.Loading->{
-
                         disableViews()
-                        delay(3000)
 
                     }
                     is ApiState.Success->{
 
-                        if (Repository.language==Utility.Language_EN_Value){
+                        if (SharedPrefData.language== Utility.Language_EN_Value){
                             countDownTime.text = "Finished !!"
                         }else{
                             countDownTime.text = "تم التحميل"
@@ -97,7 +92,7 @@ class FavDetailsFragment : Fragment() {
 
                         currentDayWeather=it.weatherRoot!!.current!!
 
-                        if(Repository.language == Utility.Language_EN_Value){
+                        if(SharedPrefData.language == Utility.Language_EN_Value){
                             binding.humidityMeasure.text=currentDayWeather.humidity.toString()+" %"
                             binding.cloudMeasure.text=currentDayWeather.clouds.toString()+" %"
                             binding.windMeasure.text=currentDayWeather.windSpeed.toString()+" m/s"
@@ -109,14 +104,15 @@ class FavDetailsFragment : Fragment() {
                             binding.weatherMood.text=currentDayWeather.weather[0].description
                             binding.cityName.text=it.weatherRoot.timezone
                         }
-                        else if(Repository.language == Utility.Language_AR_Value){
-                            binding.humidityMeasure.text=Utility.convertNumbersToArabic(currentDayWeather.humidity)+"٪ "
-                            binding.cloudMeasure.text=Utility.convertNumbersToArabic(currentDayWeather.clouds)+"٪ "
-                            binding.windMeasure.text=Utility.convertNumbersToArabic(currentDayWeather.windSpeed)+" م/ث"
-                            binding.pressureMeasure.text=Utility.convertNumbersToArabic(currentDayWeather.pressure)+" هيكتوباسكال"
-                            binding.violateMeasure.text=Utility.convertNumbersToArabic(currentDayWeather.uvi)
-                            binding.visibilityMeasure.text=Utility.convertNumbersToArabic(currentDayWeather.visibility)+" م"
-                            binding.todayTemp.text=Utility.convertNumbersToArabic(currentDayWeather.temp.toInt())+ Utility.checkUnit()
+                        else if(SharedPrefData.language == Utility.Language_AR_Value){
+                            binding.humidityMeasure.text= Utility.convertNumbersToArabic(currentDayWeather.humidity)+"٪ "
+                            binding.cloudMeasure.text= Utility.convertNumbersToArabic(currentDayWeather.clouds)+"٪ "
+                            binding.windMeasure.text= Utility.convertNumbersToArabic(currentDayWeather.windSpeed)+" م/ث"
+                            binding.pressureMeasure.text= Utility.convertNumbersToArabic(currentDayWeather.pressure)+" هيكتوباسكال"
+                            binding.violateMeasure.text= Utility.convertNumbersToArabic(currentDayWeather.uvi)
+                            binding.visibilityMeasure.text= Utility.convertNumbersToArabic(currentDayWeather.visibility)+" م"
+                            binding.todayTemp.text=
+                                Utility.convertNumbersToArabic(currentDayWeather.temp.toInt())+ Utility.checkUnit()
                             binding.todayImg.setImageResource(Utility.getWeatherStatusIcon(currentDayWeather.weather[0].icon))
                             binding.weatherMood.text=currentDayWeather.weather[0].description
                             binding.cityName.text=it.weatherRoot.timezone

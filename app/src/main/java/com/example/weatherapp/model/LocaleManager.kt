@@ -1,4 +1,4 @@
-package com.example.weatherapp.ui.setting
+package com.example.weatherapp.model
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,7 +7,6 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
-import com.example.weatherapp.ui.Utility
 import java.util.*
 
 class LocaleManager {
@@ -18,35 +17,35 @@ class LocaleManager {
             update(context, getLanguage(context))
         }
 
-        fun setNewLocale(context: Context, language : String){
+        private fun setNewLocale(context: Context, language : String){
             persistLanguage(context, language)
             update(context, language)
         }
 
-        fun update(context: Context, language: String){
+        private fun update(context: Context, language: String){
             updateResources(context, language)
-            var appContext : Context = context.applicationContext
+            val appContext : Context = context.applicationContext
             if(context != appContext){
                 updateResources(appContext, language)
             }
         }
 
-        fun getLanguage(context: Context) : String{
-            var languageShared : SharedPreferences = context.getSharedPreferences("Language", AppCompatActivity.MODE_PRIVATE)
+        private fun getLanguage(context: Context) : String{
+            val languageShared : SharedPreferences = context.getSharedPreferences("Language", AppCompatActivity.MODE_PRIVATE)
             return languageShared.getString(Utility.Language_Key, "en") ?: ""
         }
 
-        fun persistLanguage(context: Context , language: String){
+        private fun persistLanguage(context: Context, language: String){
             Utility.saveLanguageToSharedPref(context, Utility.Language_Key, language)
         }
 
         @SuppressLint("ObsoleteSdkInt")
         fun updateResources(context: Context, language: String){
-            var locale : Locale = Locale(language)
+            val locale = Locale(language)
             Locale.setDefault(locale)
 
-            var resources : Resources = context.resources
-            var config : Configuration = Configuration(resources.configuration)
+            val resources : Resources = context.resources
+            val config = Configuration(resources.configuration)
             if(Build.VERSION.SDK_INT >= 17){
                 config.setLocale(locale)
                 //context = context.createConfigurationContext(config)

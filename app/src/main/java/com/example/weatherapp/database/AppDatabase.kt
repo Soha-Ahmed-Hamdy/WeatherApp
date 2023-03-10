@@ -11,7 +11,8 @@ import com.example.weatherapp.model.*
     ,FavouritePlace::class
     ,LocalAlert::class
                      ]
-    ,version = 2)
+    ,version = 1,
+exportSchema = false)
 
 @TypeConverters(Converter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -27,6 +28,7 @@ abstract class AppDatabase : RoomDatabase() {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext, AppDatabase::class.java, "fav_country_database")
+                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance

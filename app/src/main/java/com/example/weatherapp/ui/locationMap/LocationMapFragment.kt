@@ -19,15 +19,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.weatherapp.R
-import com.example.weatherapp.databinding.FragmentHomeBinding
-import com.example.weatherapp.databinding.FragmentLocationMapBinding
-import com.example.weatherapp.model.FavouritePlace
-import com.example.weatherapp.ui.Utility
-import com.example.weatherapp.ui.favourite.favouriteViewModel.FactoryFavouriteWeather
-import com.example.weatherapp.ui.favourite.favouriteViewModel.FavouriteViewModel
+import com.example.weatherapp.model.Utility
 import com.example.weatherapp.ui.home.PERMISSION_ID
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
@@ -95,7 +89,7 @@ class LocationMapFragment : Fragment() , OnMapReadyCallback {
                 }
             }
             override fun onError(status: Status) {
-                Toast.makeText(requireContext(), status.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), status.toString(), Toast.LENGTH_SHORT).show()
 
             }
         })
@@ -121,7 +115,7 @@ class LocationMapFragment : Fragment() , OnMapReadyCallback {
     private fun requestPermission(){
         ActivityCompat.requestPermissions(
             requireActivity(),
-            arrayOf<String>(
+            arrayOf(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ),
@@ -177,7 +171,7 @@ class LocationMapFragment : Fragment() , OnMapReadyCallback {
             super.onLocationResult(locationResult)
             val mLastLocation : Location? =locationResult.getLastLocation()
 
-            val latLng = LatLng(mLastLocation!!.latitude,mLastLocation!!.longitude)
+            val latLng = LatLng(mLastLocation!!.latitude,mLastLocation.longitude)
 
             mMap.addMarker(
                 MarkerOptions()
@@ -204,7 +198,7 @@ class LocationMapFragment : Fragment() , OnMapReadyCallback {
 
         alert.setTitle("Confirm Location")
 
-        alert.setMessage("Do You want ${placeName} to be current Location")
+        alert.setMessage("Do You want $placeName to be current Location")
         alert.setPositiveButton("Save") {
                 _: DialogInterface, _: Int ->
             saveLatLong(lat.toLong(),long.toLong())
@@ -219,7 +213,7 @@ class LocationMapFragment : Fragment() , OnMapReadyCallback {
         dialog.show()
 
     }
-fun saveLatLong(lat : Long,long:Long){
+private fun saveLatLong(lat : Long, long:Long){
     Utility.saveLatitudeToSharedPref(requireContext(), Utility.LATITUDE_KEY,lat)
     Utility.saveLongitudeToSharedPref(requireContext(), Utility.LONGITUDE_KEY, long)
 

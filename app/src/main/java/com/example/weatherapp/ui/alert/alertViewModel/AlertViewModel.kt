@@ -1,34 +1,27 @@
 package com.example.weatherapp.ui.alert.alertViewModel
 
-import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.model.*
-import com.example.weatherapp.repository.Repository
+import com.example.weatherapp.model.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class AlertViewModel(context: Context)  : ViewModel() {
-
-    var repo = Repository
+class AlertViewModel(var repository : Repository)  : ViewModel() {
 
     private var _alert= MutableStateFlow<AlertState>(AlertState.Loading)
     val alert = _alert.asStateFlow()
 
-
-
     init {
-        getAlerts(context)
+        getAlerts()
 
     }
-    fun getAlerts(context: Context){
+    private fun getAlerts(){
         viewModelScope.launch (Dispatchers.IO){
-            repo.getAllAlerts(context)
+            repository.getAllAlerts()
                 ?.catch {
                     _alert.value= AlertState.Failure(it)
                 }?.collect{
@@ -37,21 +30,21 @@ class AlertViewModel(context: Context)  : ViewModel() {
         }
     }
 
-    fun insertAlert(context: Context, alert: LocalAlert){
+    fun insertAlert(alert: LocalAlert){
         viewModelScope.launch (Dispatchers.IO){
-            repo.insertAlert(context,alert)
+            repository.insertAlert(alert)
         }
     }
 
-    fun deleteAlert(context: Context, alert: LocalAlert){
+    fun deleteAlert(alert: LocalAlert){
         viewModelScope.launch (Dispatchers.IO){
-            repo.deleteAlert(context,alert)
-            getAlerts(context)
+            repository.deleteAlert(alert)
+            getAlerts()
         }
     }
 
-    fun checkConnectivity(context: Context):Boolean{
-        return repo.checkForInternet(context)
+    private fun checkConnectivity():Boolean{
+        return repository.checkForInternet()
     }
 
 

@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.databinding.DayItemBinding
 import com.example.weatherapp.model.Daily
-import com.example.weatherapp.repository.Repository
-import com.example.weatherapp.ui.Utility
+import com.example.weatherapp.model.SharedPrefData
+import com.example.weatherapp.model.Utility
 
 class DayAdapter(private val day: List<Daily>) : RecyclerView.Adapter<DayAdapter.ViewHolder>() {
 
@@ -26,7 +26,7 @@ class DayAdapter(private val day: List<Daily>) : RecyclerView.Adapter<DayAdapter
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.binding.dayName.text = Utility.timeNameOfToDay(day[position].dt)
-        if (Repository.language== Utility.Language_EN_Value){
+        if (SharedPrefData.language== Utility.Language_EN_Value){
             holder.binding.dayTemp.text =
                 day[position].temp.max.toInt().toString()+
                         "/" +

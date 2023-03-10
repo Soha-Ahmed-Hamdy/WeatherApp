@@ -1,37 +1,30 @@
 package com.example.weatherapp.ui.favourite.favouriteViewModel
 
-import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.model.FavouritePlace
 import com.example.weatherapp.model.RoomState
-import com.example.weatherapp.repository.Repository
+import com.example.weatherapp.model.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 
-class FavouriteViewModel(context: Context) : ViewModel() {
-
-    var repo = Repository
+class FavouriteViewModel(var repository : Repository) : ViewModel() {
 
     private var _favWeather= MutableStateFlow<RoomState>(RoomState.Loading)
     val favWeather = _favWeather.asStateFlow()
 
-
-
     init {
-        getFav(context)
+        getFav()
 
     }
-    fun getFav(context: Context){
+    private fun getFav(){
         viewModelScope.launch (Dispatchers.IO){
-            repo.getAllFavCountry(context)
+            repository.getAllFavCountry()
                 ?.catch {
                     _favWeather.value=RoomState.Failure(it)
                 }?.collect{
@@ -40,21 +33,21 @@ class FavouriteViewModel(context: Context) : ViewModel() {
         }
     }
 
-    fun insertFav(context: Context, fav: FavouritePlace){
+    fun insertFav(fav: FavouritePlace){
         viewModelScope.launch (Dispatchers.IO){
-            repo.insertFavCountry(context,fav)
+            repository.insertFavCountry(fav)
         }
     }
 
-    fun deleteFav(context: Context, fav: FavouritePlace){
+    fun deleteFav(fav: FavouritePlace){
         viewModelScope.launch (Dispatchers.IO){
-            repo.deleteFavCountry(context,fav)
-            getFav(context)
+            repository.deleteFavCountry(fav)
+            getFav()
         }
     }
 
-    fun checkConnectivity(context: Context):Boolean{
-        return repo.checkForInternet(context)
+    fun checkConnectivity():Boolean{
+        return repository.checkForInternet()
     }
 
 }

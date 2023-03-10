@@ -1,8 +1,6 @@
 package com.example.weatherapp.database
 
 import androidx.room.*
-import com.example.weatherapp.model.Alert
-import com.example.weatherapp.model.FavouritePlace
 import com.example.weatherapp.model.LocalAlert
 import kotlinx.coroutines.flow.Flow
 

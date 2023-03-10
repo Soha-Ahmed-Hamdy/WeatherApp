@@ -20,7 +20,8 @@ data class Root (
     val timezoneOffset: Long,
     val current: Current?=null,
     val hourly: List<Current>,
-    val daily: List<Daily>
+    val daily: List<Daily>,
+    val alerts: List<Alert>
 )
 
 
@@ -137,11 +138,16 @@ data class Alert(
 
 @Entity
 data class LocalAlert(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo("id_alert")
-    val id:Long,
-    val time: String,
-    val end: String,
+
+    val time: Long,
+    val end: Long,
     val zoneName: String,
-    val start: String,
-)
+    val start: Long,
+    val lattuide: Double=0.0,
+    val longtuide: Double=0.0
+) : java.io.Serializable{
+
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0
+
+}

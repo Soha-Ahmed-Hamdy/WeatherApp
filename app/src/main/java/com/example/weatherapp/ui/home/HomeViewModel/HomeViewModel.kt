@@ -1,34 +1,30 @@
 package com.example.weatherapp.ui.home.HomeViewModel
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.model.*
-import com.example.weatherapp.repository.Repository
+import com.example.weatherapp.model.repository.Repository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class HomeViewModel(context: Context,lat: Double,long: Double) : ViewModel() {
-
-    var repo = Repository
-
+class HomeViewModel(var repository :Repository) : ViewModel() {
 
     private var _rootWeather= MutableStateFlow<ApiState>(ApiState.Loading)
     val rootWeather= _rootWeather.asStateFlow()
 
 
     init {
-        getRootHome(context, lat, long)
-        getStates(context)
+        getRootHome()
+        getStates()
     }
-    fun getStates(context: Context){
-        repo.setupSharedPrefrences(context)
+    fun getStates(){
+        repository.getStates()
     }
 
-    fun getRootHome(context: Context,lat: Double,long: Double)=
+    fun getRootHome()=
         viewModelScope.launch {
 
-            repo.getHomeData(context, lat, long)
+            repository.getHomeData()
                 ?.catch { e ->
                 _rootWeather.value = ApiState.Failure(e)
             }

@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.databinding.AlertSavedItemBinding
 import com.example.weatherapp.model.LocalAlert
+import com.example.weatherapp.model.Utility
+
 class AlertAdapter(private val alerts: List<LocalAlert>
                       , var listener: (LocalAlert) -> Unit
 
@@ -23,11 +25,11 @@ class AlertAdapter(private val alerts: List<LocalAlert>
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.fromMeasure.text = alerts[position].start.toString()
-        holder.binding.toMeasure.text = alerts[position]?.end!!.toString()
-        holder.binding.timeMeasure.text = alerts[position].time.toString()
+        holder.binding.fromMeasure.text = Utility.longToDate(alerts[position].start)
+        holder.binding.toMeasure.text = Utility.longToDate(alerts[position].end)
+        holder.binding.timeMeasure.text = Utility.timeStampToHour(alerts[position].time)
         holder.binding.zoneMeasure.text = alerts[position].zoneName
-        holder.binding.allViewAlert.setOnClickListener { alerts[position]?.let { it -> listener(it) } }
+        holder.binding.delIcon.setOnClickListener { alerts[position].let { listener(it) } }
 
     }
 

@@ -1,13 +1,13 @@
 package com.example.weatherapp.ui.favourite.favouriteViewModel
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.weatherapp.model.repository.Repository
 
-class FactoryFavouriteWeather(private val context: Context):ViewModelProvider.Factory {
+class FactoryFavouriteWeather(var repository: Repository):ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(FavouriteViewModel::class.java)){
-            FavouriteViewModel(context) as T
+            FavouriteViewModel(repository) as T
         }else{
             throw java.lang.IllegalArgumentException("error")
         }

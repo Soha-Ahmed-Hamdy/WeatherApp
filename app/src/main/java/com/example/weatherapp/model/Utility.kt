@@ -1,50 +1,58 @@
-package com.example.weatherapp.ui
+package com.example.weatherapp.model
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherapp.R
-import com.example.weatherapp.repository.Repository
+import com.example.weatherapp.model.repository.Repository
 import java.text.DateFormat
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
 class Utility {
 companion object{
 
-    val Language_EN_Value : String = "en"
-    val Language_AR_Value : String = "ar"
-    val Language_Key : String = "Lang"
-    val TEMP_KEY : String = "Temp"
-    val IMPERIAL : String = "imperial"
-    val STANDARD : String = "standard"
-    val METRIC : String = "metric"
-    val Language_Value_Key: String ="Language"
-    val LOCATION_KEY : String = "Location"
-    val MAP : String = "map"
-    val GPS : String = "gps"
-    val LONGITUDE_KEY : String = "Longitude"
-    val LATITUDE_KEY : String = "Latitude"
-    val LAT : String = "0.0"
-    val LONG : String = "0.0"
+    const val Language_EN_Value : String = "en"
+    const val Language_AR_Value : String = "ar"
+    const val Language_Key : String = "Lang"
+    const val TEMP_KEY : String = "Temp"
+    const val IMPERIAL : String = "imperial"
+    const val STANDARD : String = "standard"
+    const val METRIC : String = "metric"
+    const val Language_Value_Key: String ="Language"
+    const val LOCATION_KEY : String = "Location"
+    const val MAP : String = "map"
+    const val GPS : String = "gps"
+    const val LONGITUDE_KEY : String = "Longitude"
+    const val LATITUDE_KEY : String = "Latitude"
+
 
     fun checkUnit():String{
-            var tempMeasure:String?=null
-            if(Repository.language== Language_EN_Value){
-                if(Repository.unit== IMPERIAL){
-                    tempMeasure=" °F"
-                }else if(Repository.unit== STANDARD){
-                    tempMeasure=" °K"
-                }else{
-                    tempMeasure=" °C"
+            val tempMeasure:String
+            if(SharedPrefData.language== Language_EN_Value){
+                tempMeasure = when (SharedPrefData.unit) {
+                    IMPERIAL -> {
+                        " °F"
+                    }
+                    STANDARD -> {
+                        " °K"
+                    }
+                    else -> {
+                        " °C"
+                    }
                 }
             }else{
-                if(Repository.unit== IMPERIAL){
-                    tempMeasure=" °ف"
-                }else if(Repository.unit== STANDARD){
-                    tempMeasure=" °كلفن"
-                }else{
-                    tempMeasure=" °م"
+                tempMeasure = when (SharedPrefData.unit) {
+                    IMPERIAL -> {
+                        " °ف"
+                    }
+                    STANDARD -> {
+                        " °كلفن"
+                    }
+                    else -> {
+                        " °م"
+                    }
                 }
 
             }
@@ -52,7 +60,7 @@ companion object{
         }
 
     fun saveLanguageToSharedPref(context: Context, key: String, value: String){
-        var editor : SharedPreferences.Editor = context.getSharedPreferences("Language",
+        val editor : SharedPreferences.Editor = context.getSharedPreferences("Language",
         AppCompatActivity.MODE_PRIVATE
         ).edit()
         editor.putString(key, value)
@@ -60,13 +68,13 @@ companion object{
     }
 
     fun timeNameOfToDay(dt: Long) : String{
-        var date: Date = Date(dt * 1000)
-        var dateFormat : DateFormat = SimpleDateFormat("EEEE")
+        val date= Date(dt * 1000)
+        val dateFormat : DateFormat = SimpleDateFormat("EEEE")
         return dateFormat.format(date)
     }
 
     fun saveTempToSharedPref(context: Context, key : String, value : String){
-        var editor : SharedPreferences.Editor = context.getSharedPreferences("Units",
+        val editor : SharedPreferences.Editor = context.getSharedPreferences("Units",
             AppCompatActivity.MODE_PRIVATE
         ).edit()
         editor.putString(key, value)
@@ -74,7 +82,7 @@ companion object{
     }
 
     fun saveLatitudeToSharedPref(context: Context, key : String, value : Long){
-        var editor : SharedPreferences.Editor = context.getSharedPreferences("Latitude",
+        val editor : SharedPreferences.Editor = context.getSharedPreferences("Latitude",
             AppCompatActivity.MODE_PRIVATE
         ).edit()
         editor.putLong(key, value)
@@ -82,7 +90,7 @@ companion object{
     }
 
     fun saveLongitudeToSharedPref(context: Context, key : String, value : Long){
-        var editor : SharedPreferences.Editor = context.getSharedPreferences("Longitude",
+        val editor : SharedPreferences.Editor = context.getSharedPreferences("Longitude",
             AppCompatActivity.MODE_PRIVATE
         ).edit()
         editor.putLong(key, value)
@@ -90,7 +98,7 @@ companion object{
     }
 
     fun saveLocationToSharedPref(context: Context, key : String, value : String){
-        var editor : SharedPreferences.Editor = context.getSharedPreferences("Location",
+        val editor : SharedPreferences.Editor = context.getSharedPreferences("Location",
             AppCompatActivity.MODE_PRIVATE
         ).edit()
         editor.putString(key, value)
@@ -98,8 +106,8 @@ companion object{
     }
 
     fun timeStampToHour(dt : Long) : String{
-        var date: Date = Date(dt * 1000)
-        var dateFormat : DateFormat = SimpleDateFormat("h:mm a")
+        val date= Date(dt * 1000)
+        val dateFormat : DateFormat = SimpleDateFormat("h:mm a")
         return dateFormat.format(date)
     }
     fun getWeatherStatusIcon(imageString: String): Int {
@@ -147,11 +155,53 @@ companion object{
         .replace("7".toRegex(), "٧").replace("8".toRegex(), "٨")
         .replace("9".toRegex(), "٩").replace("0".toRegex(), "٠")}
     fun timeStampToDate (dt : Long) : String{
-        var date : Date = Date(dt * 1000)
-        var dateFormat : DateFormat = SimpleDateFormat("MMM d, yyyy")
+        val date = Date(dt * 1000)
+        val dateFormat : DateFormat = SimpleDateFormat("MMM d, yyyy")
         return dateFormat.format(date)
     }
+    fun dateToLong(date: String?): Long {
+        val f = SimpleDateFormat("dd-MM-yyyy")
+        var milliseconds: Long = 0
+        try {
+            val d = date?.let { f.parse(it) }
+            milliseconds = d!!.time
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        return milliseconds
+    }
+
+    fun longToDate (dt : Long) : String{
+        val date = Date(dt)
+        val dateFormat : DateFormat = SimpleDateFormat("MMM d, yyyy")
+        return dateFormat.format(date)
+    }
+
+    fun timeToLong (str : String) : Long{
+        val date = str.split(":")
+        val minutesSum = (date[0].toInt()*60)+date[1].toInt()
+        return minutesSum.toLong()
+    }
+
+    fun LongToTime (time : Long) : String{
+        var hour = time.toInt()/60
+        var min = time.toInt()%60
+        var am_pm = ""
+
+        when {
+            hour == 0 -> {
+                hour += 12
+                am_pm = "AM"
+            }
+            hour == 12 -> am_pm = "PM"
+            hour > 12 -> {
+                hour -= 12
+                am_pm = "PM"
+            }
+            else -> am_pm = "AM"
+        }
+        val date = "$hour:$min $am_pm"
+        return date
+    }
 }
-
-
 }

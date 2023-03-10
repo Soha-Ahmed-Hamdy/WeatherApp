@@ -1,4 +1,4 @@
-package com.example.weatherapp.ui
+package com.example.weatherapp.ui.selectMap
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -18,13 +18,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.example.weatherapp.R
-import com.example.weatherapp.model.FavouritePlace
-import com.example.weatherapp.model.repository.Repository
-import com.example.weatherapp.ui.favourite.favouriteViewModel.FactoryFavouriteWeather
-import com.example.weatherapp.ui.favourite.favouriteViewModel.FavouriteViewModel
 import com.example.weatherapp.ui.home.PERMISSION_ID
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
@@ -40,10 +39,14 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 
 
-class MapFragment : Fragment(), OnMapReadyCallback {
-    private lateinit var mMap: GoogleMap
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient
-    private lateinit var fact: FactoryFavouriteWeather
+class SelectMapFragment : DialogFragment() , OnMapReadyCallback {
+    lateinit var mMap: GoogleMap
+    lateinit var mFusedLocationClient: FusedLocationProviderClient
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_TITLE, R.style.Theme_WeatherApp_Dialog)
+
+    }
 
 
     override fun onCreateView(
@@ -51,18 +54,22 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
 
-        return inflater.inflate(R.layout.fragment_map, container, false)
+
+        return inflater.inflate(R.layout.fragment_select_map, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment=childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
+
+
         mapFragment.getMapAsync(this)
         val apiKey = getString(R.string.api_key)
         if (!Places.isInitialized()) {
             Places.initialize(requireContext(), apiKey)
         }
+
         val autocompleteFragment =
             childFragmentManager.findFragmentById(R.id.place_autocomplete_fragment)
                     as AutocompleteSupportFragment
@@ -99,7 +106,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         getLastMLocation()
         mMap = googleMap
 
-
     }
 
     private fun checkPermission():Boolean{
@@ -135,7 +141,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
-
     private fun isLocationEnabled(): Boolean {
         val locationManager: LocationManager =
             requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -159,7 +164,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun requestNewLocationData(){
         val mLocationRequest = LocationRequest()
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-        mLocationRequest.setInterval(400000)
+        mLocationRequest.setInterval(200000)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         mFusedLocationClient.requestLocationUpdates(
             mLocationRequest, mLocationCallback,
@@ -181,44 +186,57 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10f))
 
-            mMap.setOnMapLongClickListener {
-                    latLng ->    mMap.addMarker(
-                        MarkerOptions()
-                        .position(latLng)
-                        .title("My Location")
+            mMap.setOnMapLongClickListener { latLng ->    mMap.addMarker(
+                MarkerOptions().position(latLng).title(Geocoder(requireContext()).getFromLocation(latLng.latitude, latLng.longitude, 1).toString())
 
             )
                 val geoCoder = Geocoder(requireContext())
                 val address = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-                checkSaveToFavorite(FavouritePlace(latLng.latitude,latLng.longitude,address?.get(0)?.countryName.toString(),address?.get(0)?.adminArea.toString()),address?.get(0)?.countryName.toString())
+                confirmAlertLocation(latLng.latitude,latLng.longitude,address?.get(0)?.adminArea.toString())
             }
 
         }
     }
-    fun checkSaveToFavorite(favouritePlace: FavouritePlace,placeName: String) {
+
+    fun confirmAlertLocation(lat: Double,long: Double, placeName: String) {
         val alert: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
 
-        alert.setTitle("Favorite")
-
-        alert.setMessage("Do You want to save $placeName to your favorite")
-        alert.setPositiveButton("Save") {
+        alert.setTitle("Confirm Location")
+        alert.setMessage("Do You want to set Alert in${placeName}")
+        alert.setPositiveButton("Yes") {
                 _: DialogInterface, _: Int ->
-
-            val repository = Repository(requireContext())
-
-            fact= FactoryFavouriteWeather(repository)
-
-            val favouriteViewModel= ViewModelProvider(requireActivity(),fact).get(FavouriteViewModel::class.java)
-
-            favouriteViewModel.insertFav(favouritePlace)
-
-            Toast.makeText(requireContext()
-                , "Data has been saved"
-                , Toast.LENGTH_SHORT).show()
+            registerObserver(placeName,lat.toLong(), long.toLong() )
+            NavHostFragment.findNavController(this).popBackStack()
         }
         val dialog = alert.create()
         dialog.show()
 
+    }
+    fun registerObserver(cityName:String,lat:Long,long: Long){
+
+        val navController = findNavController()
+        // After a configuration change or process death, the currentBackStackEntry
+        // points to the dialog destination, so you must use getBackStackEntry()
+        // with the specific ID of your destination to ensure we always
+        // get the right NavBackStackEntry
+        val navBackStackEntry = navController.previousBackStackEntry
+
+        // Create our observer and add it to the NavBackStackEntry's lifecycle
+        val observer = LifecycleEventObserver { _, event ->
+
+        }
+        navBackStackEntry?.lifecycle?.addObserver(observer)
+
+        // As addObserver() does not automatically remove the observer, we
+        // call removeObserver() manually when the view lifecycle is destroyed
+        viewLifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                navBackStackEntry?.savedStateHandle?.set("cityName",cityName)
+                navBackStackEntry?.savedStateHandle?.set("lat",lat)
+                navBackStackEntry?.savedStateHandle?.set("long",long)
+                navBackStackEntry?.lifecycle?.removeObserver(observer)
+            }
+        })
     }
 
 

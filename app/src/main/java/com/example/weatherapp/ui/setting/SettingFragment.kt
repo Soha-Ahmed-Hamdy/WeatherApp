@@ -10,17 +10,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentSettingBinding
-import com.example.weatherapp.repository.Repository
-import com.example.weatherapp.ui.Utility
+import com.example.weatherapp.model.LocaleManager
+import com.example.weatherapp.model.SharedPrefData
+import com.example.weatherapp.model.repository.Repository
+import com.example.weatherapp.model.Utility
 
 
 class SettingFragment : Fragment() {
 
     private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!!
-    lateinit var fact: FactorySetting
-    lateinit var settingViewModel: SettingViewModel
-    lateinit var root: View
+    private lateinit var fact: FactorySetting
+    private lateinit var settingViewModel: SettingViewModel
+    private lateinit var root: View
+    private lateinit var repository: Repository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +34,8 @@ class SettingFragment : Fragment() {
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
         root = binding.root
 
+        repository = Repository(requireContext())
+
         checkRadioButtons()
         changeLanguage()
         changeTemperature()
@@ -39,7 +44,7 @@ class SettingFragment : Fragment() {
         return root
     }
     private fun refreshFragment(){
-        fragmentManager?.beginTransaction()?.detach(this)?.attach(this)?.commit()
+        requireActivity().recreate()
     }
 
     override fun onAttach(context: Context) {
@@ -115,22 +120,26 @@ class SettingFragment : Fragment() {
     }
 
     private fun initViewModel(){
-        fact= FactorySetting(requireContext())
+        fact= FactorySetting(repository)
         settingViewModel= ViewModelProvider(requireActivity(),fact).get(SettingViewModel::class.java)
-        settingViewModel.getStates(requireContext())
+        settingViewModel.getStates()
 
     }
     private fun checkUnit(){
-        if(Repository.unit== Utility.IMPERIAL){
-            binding.fahrenheit.isChecked=true
-        }else if(Repository.unit== Utility.STANDARD){
-            binding.kelvin.isChecked=true
-        }else{
-            binding.celsius.isChecked=true
+        when (SharedPrefData.unit) {
+            Utility.IMPERIAL -> {
+                binding.fahrenheit.isChecked=true
+            }
+            Utility.STANDARD -> {
+                binding.kelvin.isChecked=true
+            }
+            else -> {
+                binding.celsius.isChecked=true
+            }
         }
     }
     private fun checkLanguage(){
-        if(Repository.language== Utility.Language_EN_Value){
+        if(SharedPrefData.language== Utility.Language_EN_Value){
             binding.english.isChecked=true
         }else{
             binding.arabic.isChecked=true
@@ -138,7 +147,7 @@ class SettingFragment : Fragment() {
     }
 
     private fun checkLocation(){
-        if(Repository.location== Utility.MAP){
+        if(SharedPrefData.location== Utility.MAP){
             binding.map.isChecked=true
         }else{
             binding.gps.isChecked=true

@@ -74,56 +74,51 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:id="@+id/from_measure"
             android:textSize="18sp"
             android:textAllCaps="false"
             app:layout_constraintTop_toTopOf="@id/from_text"
             app:layout_constraintBottom_toBottomOf="@id/from_text"
-            app:layout_constraintStart_toEndOf="@id/from_text"
-            android:textColor="@color/purple_500"
-            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/zone_measure"
+            android:textColor="@color/purple_700"
 
             />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:id="@+id/to_measure"
             android:textSize="18sp"
             android:textAllCaps="false"
             app:layout_constraintTop_toTopOf="@id/to_text"
             app:layout_constraintBottom_toBottomOf="@id/to_text"
-            app:layout_constraintStart_toEndOf="@id/to_text"
-            android:textColor="@color/purple_500"
-            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/zone_measure"
+            android:textColor="@color/purple_700"
             />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:id="@+id/time_measure"
             android:textSize="18sp"
             android:textAllCaps="false"
             app:layout_constraintTop_toTopOf="@id/time_text"
             app:layout_constraintBottom_toBottomOf="@id/time_text"
-            app:layout_constraintStart_toEndOf="@id/time_text"
-            android:textColor="@color/purple_500"
-            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/zone_measure"
+            android:textColor="@color/purple_700"
             />
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:id="@+id/zone_measure"
-            android:textSize="18sp"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
             android:textAllCaps="false"
-            app:layout_constraintTop_toTopOf="@id/zone_text"
-            app:layout_constraintStart_toEndOf="@id/zone_text"
+            android:textColor="@color/purple_700"
+            android:textSize="18sp"
+            android:maxEms="10"
+            android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="@id/zone_text"
-            android:textColor="@color/purple_500"
-            android:textStyle="bold"
-            />
+            app:layout_constraintStart_toEndOf="@id/zone_text"
+            app:layout_constraintTop_toTopOf="@id/zone_text" />
 
         <ImageView
             android:layout_width="30dp"

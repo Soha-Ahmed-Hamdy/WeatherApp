@@ -14,21 +14,21 @@ import androidx.navigation.Navigation
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentFavouriteBinding
 import com.example.weatherapp.model.*
-import com.example.weatherapp.repository.Repository
+import com.example.weatherapp.model.repository.Repository
 import com.example.weatherapp.ui.favourite.favouriteViewModel.FactoryFavouriteWeather
 import com.example.weatherapp.ui.favourite.favAdapters.FavouritAdapter
 import com.example.weatherapp.ui.favourite.favouriteViewModel.FavouriteViewModel
-import com.example.weatherapp.ui.Utility
+import com.example.weatherapp.model.Utility
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class FavouriteFragment : Fragment() {
 
     private var _binding: FragmentFavouriteBinding? = null
-    lateinit var favList: List<FavouritePlace?>
-    lateinit var favAdapter: FavouritAdapter
-    lateinit var fact: FactoryFavouriteWeather
-    lateinit var favouriteViewModel: FavouriteViewModel
+    private lateinit var favList: List<FavouritePlace?>
+    private lateinit var favAdapter: FavouritAdapter
+    private lateinit var fact: FactoryFavouriteWeather
+    private lateinit var favouriteViewModel: FavouriteViewModel
 
 
     // This property is only valid between onCreateView and
@@ -45,12 +45,14 @@ class FavouriteFragment : Fragment() {
         _binding = FragmentFavouriteBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        fact = FactoryFavouriteWeather(requireContext())
+        val repository = Repository(requireContext())
+
+        fact = FactoryFavouriteWeather(repository)
         favouriteViewModel =
             ViewModelProvider(requireActivity(), fact).get(FavouriteViewModel::class.java)
 
         binding.floatingAddFav.setOnClickListener {
-            if (favouriteViewModel.checkConnectivity(requireContext())) {
+            if (favouriteViewModel.checkConnectivity()) {
                 Navigation.findNavController(root)
                     .navigate(R.id.action_nav_favourite_to_mapFragment)
             } else {
@@ -68,14 +70,14 @@ class FavouriteFragment : Fragment() {
                     is RoomState.Success -> {
                         favList = it.countrysFav
 
-                        var listener = { favPlace: FavouritePlace ->
-                            favouriteViewModel.deleteFav(requireContext(), favPlace)
+                        val listener = { favPlace: FavouritePlace ->
+                            favouriteViewModel.deleteFav(favPlace)
                         }
-                        var listener2 = { favPlace: FavouritePlace ->
-                            if (favouriteViewModel.checkConnectivity(requireContext())) {
+                        val listener2 = { favPlace: FavouritePlace ->
+                            if (favouriteViewModel.checkConnectivity()) {
 
-                                var bundle: Bundle? = Bundle()
-                                bundle?.putSerializable("favItem", favPlace)
+                                val bundle = Bundle()
+                                bundle.putSerializable("favItem", favPlace)
                                 Navigation.findNavController(root)
                                     .navigate(R.id.favDetailsFragment, bundle)
                             } else {
@@ -96,34 +98,13 @@ class FavouriteFragment : Fragment() {
             }
         }
 
-        /* favouriteViewModel.favWeather.observe(viewLifecycleOwner) {
-             favList=it
-             var listener={
-                     favPlace: FavouritePlace ->
-                 favouriteViewModel.deleteFav(requireContext(),favPlace)
-             }
-             var listener2={
-                     favPlace: FavouritePlace ->
-                     if(favouriteViewModel.checkConnectivity(requireContext())){
-                         var bundle :Bundle?= Bundle()
-                         bundle?.putSerializable("favItem",favPlace)
-                         Navigation.findNavController(root).navigate(R.id.favDetailsFragment,bundle)
-                     }else{
-                    displayDialog()
-                 }
-             }
-             favAdapter=
-                 FavouritAdapter(favList,listener,listener2)
-             binding.favRecycler.adapter=favAdapter
-         }*/
-
         return root
     }
 
 
-    fun displayDialog() {
+    private fun displayDialog() {
         val alert: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
-        if(Repository.language== Utility.Language_EN_Value){
+        if(SharedPrefData.language== Utility.Language_EN_Value){
             alert.setTitle("Warning")
             alert.setMessage("Check Internet Connection")
             alert.setPositiveButton("Cancel") { _: DialogInterface, _: Int ->

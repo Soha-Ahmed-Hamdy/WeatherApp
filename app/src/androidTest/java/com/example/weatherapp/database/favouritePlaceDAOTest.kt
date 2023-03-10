@@ -2,19 +2,16 @@ package com.example.weatherapp.database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.example.weatherapp.model.FavouritePlace
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert
 import org.hamcrest.collection.IsEmptyCollection
-import org.hamcrest.core.Is
 import org.hamcrest.core.IsNull
 import org.junit.Assert.*
 
@@ -30,8 +27,8 @@ import org.junit.runner.RunWith
 class favouritePlaceDAOTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
-    lateinit var db:AppDatabase
-    lateinit var favDao: favouritePlaceDAO
+    private lateinit var db:AppDatabase
+    private lateinit var favDao: favouritePlaceDAO
 
     @Before
     fun setUp() {
@@ -78,6 +75,7 @@ class favouritePlaceDAOTest {
 
         //When
         favDao.insertFavourite(data)
+
         //Then
         val result= favDao.allFavouriteWeather().first()
         MatcherAssert.assertThat(result[0], IsNull.notNullValue())
@@ -91,8 +89,10 @@ class favouritePlaceDAOTest {
         val data = FavouritePlace(120.233,13.123,"","")
         favDao.insertFavourite(data)
         val insertedData= favDao.allFavouriteWeather().first()
+
         //When
         favDao.deleteFavouritePlace(insertedData[0])
+
         //Then
         val result= favDao.allFavouriteWeather().first()
         assertThat(result, IsEmptyCollection.empty())

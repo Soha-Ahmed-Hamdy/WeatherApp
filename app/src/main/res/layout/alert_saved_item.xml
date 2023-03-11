@@ -4,15 +4,17 @@
     android:layout_height="120dp"
     android:id="@+id/all_view_alert"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="30dp"
+    app:cardCornerRadius="60dp"
     android:layout_margin="10dp"
+    android:backgroundTint="@color/orange"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
         >
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="80dp"
             android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -21,102 +23,107 @@
             android:src="@drawable/dialog_img"
             android:id="@+id/saved_alert_img"
             />
+
         <TextView
+            android:id="@+id/from_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:id="@+id/from_text"
-            android:textSize="18sp"
+            android:fontFamily="@font/lemon"
             android:text="@string/from"
             android:textAllCaps="false"
-            app:layout_constraintTop_toTopOf="@id/saved_alert_img"
-            app:layout_constraintStart_toEndOf="@id/saved_alert_img"
             android:textColor="@color/grey"
-            />
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@id/saved_alert_img"
+            app:layout_constraintTop_toTopOf="@id/saved_alert_img" />
+
         <TextView
+            android:id="@+id/to_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:id="@+id/to_text"
-            android:textSize="18sp"
+            android:fontFamily="@font/lemon"
             android:text="@string/to"
             android:textAllCaps="false"
-            app:layout_constraintTop_toBottomOf="@id/from_text"
-            app:layout_constraintStart_toEndOf="@id/saved_alert_img"
             android:textColor="@color/grey"
-            />
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@id/saved_alert_img"
+            app:layout_constraintTop_toBottomOf="@id/from_text" />
+
         <TextView
+            android:id="@+id/time_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:id="@+id/time_text"
-            android:textSize="18sp"
+            android:fontFamily="@font/lemon"
             android:text="@string/time"
             android:textAllCaps="false"
-            app:layout_constraintTop_toBottomOf="@id/to_text"
-            app:layout_constraintStart_toEndOf="@id/saved_alert_img"
             android:textColor="@color/grey"
-            />
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@id/saved_alert_img"
+            app:layout_constraintTop_toBottomOf="@id/to_text" />
+
         <TextView
+            android:id="@+id/zone_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:id="@+id/zone_text"
-            android:textSize="18sp"
+            android:fontFamily="@font/lemon"
             android:text="@string/zone"
             android:textAllCaps="false"
-            app:layout_constraintTop_toBottomOf="@id/time_text"
-            app:layout_constraintStart_toEndOf="@id/saved_alert_img"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:textColor="@color/grey"
-            />
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/saved_alert_img"
+            app:layout_constraintTop_toBottomOf="@id/time_text"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
+            android:id="@+id/from_measure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/from_measure"
-            android:textSize="18sp"
             android:textAllCaps="false"
-            app:layout_constraintTop_toTopOf="@id/from_text"
+            android:textColor="@color/white"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@id/from_text"
             app:layout_constraintStart_toStartOf="@id/zone_measure"
-            android:textColor="@color/purple_700"
 
-            />
+            app:layout_constraintTop_toTopOf="@id/from_text" />
+
         <TextView
+            android:id="@+id/to_measure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/to_measure"
-            android:textSize="18sp"
             android:textAllCaps="false"
-            app:layout_constraintTop_toTopOf="@id/to_text"
+            android:textColor="@color/white"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@id/to_text"
             app:layout_constraintStart_toStartOf="@id/zone_measure"
-            android:textColor="@color/purple_700"
-            />
+            app:layout_constraintTop_toTopOf="@id/to_text" />
+
         <TextView
+            android:id="@+id/time_measure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/time_measure"
-            android:textSize="18sp"
             android:textAllCaps="false"
-            app:layout_constraintTop_toTopOf="@id/time_text"
+            android:textColor="@color/white"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@id/time_text"
             app:layout_constraintStart_toStartOf="@id/zone_measure"
-            android:textColor="@color/purple_700"
-            />
+            app:layout_constraintTop_toTopOf="@id/time_text" />
 
         <TextView
             android:id="@+id/zone_measure"
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:layout_marginStart="10dp"
-            android:textAllCaps="false"
-            android:textColor="@color/purple_700"
-            android:textSize="18sp"
             android:maxEms="10"
             android:maxLines="1"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@id/zone_text"
+            app:layout_constraintEnd_toStartOf="@id/del_icon"
             app:layout_constraintStart_toEndOf="@id/zone_text"
             app:layout_constraintTop_toTopOf="@id/zone_text" />
 

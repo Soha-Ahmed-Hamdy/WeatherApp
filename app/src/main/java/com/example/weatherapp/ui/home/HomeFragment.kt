@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
@@ -30,6 +31,7 @@ import com.example.weatherapp.ui.home.HomeViewModel.HomeViewModel
 import com.example.weatherapp.ui.home.homeAdapters.DayAdapter
 import com.example.weatherapp.ui.home.homeAdapters.HourAdapter
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -47,6 +49,8 @@ class HomeFragment : Fragment() {
     lateinit var mFusedLocationClient: FusedLocationProviderClient
     var lat : Double = 30.6210725
     var long : Double = 32.2687095
+    var address: String = ""
+    var addressLocal : String=""
 
     private val binding get() = _binding!!
 
@@ -66,14 +70,13 @@ class HomeFragment : Fragment() {
         progressIndicator=binding.indicator
         countDownTime = binding.tvIndicator
 
-        var repository=Repository.getRepositoryInstance(requireActivity().application)
+        val repository=Repository.getRepositoryInstance(requireActivity().application)
 
         fact= FactoryHomeWeather(repository)
         homeViewModel= ViewModelProvider(requireActivity(),fact).get(HomeViewModel::class.java)
         homeViewModel.getRootHome()
         homeViewModel.getStates()
         Utility.checkUnit()
-
 
         lifecycleScope.launch {
             homeViewModel.rootWeather.collectLatest {
@@ -111,7 +114,7 @@ class HomeFragment : Fragment() {
                             binding.todayTemp.text=it.weatherRoot.current.temp.toInt().toString()+ Utility.checkUnit()
                             binding.todayImg.setImageResource(Utility.getWeatherStatusIcon(it.weatherRoot.current.weather[0].icon))
                             binding.weatherMood.text=it.weatherRoot.current.weather[0].description
-                            binding.cityName.text=it.weatherRoot.timezone
+                            binding.cityName.text = SharedPrefData.place
 
                         }
                         else if(SharedPrefData.language == Utility.Language_AR_Value){
@@ -125,7 +128,8 @@ class HomeFragment : Fragment() {
                                 Utility.convertNumbersToArabic(it.weatherRoot.current.temp.toInt())+ Utility.checkUnit()
                             binding.todayImg.setImageResource(Utility.getWeatherStatusIcon(it.weatherRoot.current.weather[0].icon))
                             binding.weatherMood.text = it.weatherRoot.current.weather[0].description
-                            binding.cityName.text=it.weatherRoot.timezone
+                            binding.cityName.text = SharedPrefData.place
+
 
                         }
 
@@ -214,11 +218,24 @@ class HomeFragment : Fragment() {
             val mLastLocation : Location? =locationResult.getLastLocation()
             lat= mLastLocation?.latitude!!
             long=mLastLocation?.longitude!!
-            if(SharedPrefData.location== Utility.GPS){
-                saveLatLong(lat.toLong(),long.toLong())
-            }
 
-            mFusedLocationClient.removeLocationUpdates(this)
+            if(SharedPrefData.location== Utility.GPS){
+                try{
+                    var geoCoder = Geocoder(requireContext())
+                    val latLng = LatLng(mLastLocation.latitude,mLastLocation.longitude)
+                    address = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)?.get(0)?.adminArea.toString()
+                    addressLocal= geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)?.get(0)?.locality.toString()
+                    saveLatLong(lat.toLong(),long.toLong())
+                    if(addressLocal == null){
+                        Utility.savePlaceToSharedPref(requireContext(), Utility.PLACE_KEY, address)
+                    }else{
+                        Utility.savePlaceToSharedPref(requireContext(), Utility.PLACE_KEY, address+"/"+addressLocal)
+
+                    }
+                }catch (_: Exception){
+
+                }
+            }
 
         }
     }

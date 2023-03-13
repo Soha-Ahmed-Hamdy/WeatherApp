@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.weatherapp.R
@@ -40,6 +41,7 @@ class SettingFragment : Fragment() {
         changeLanguage()
         changeTemperature()
         changeLocation()
+        changeNotification()
 
         return root
     }
@@ -101,11 +103,31 @@ class SettingFragment : Fragment() {
             when (checkedButtonId) {
                 binding.map.id -> {
                     Utility.saveLocationToSharedPref(requireContext(), Utility.LOCATION_KEY, Utility.MAP)
+                    refreshFragment()
                     Navigation.findNavController(root)
                         .navigate(R.id.locationMapFragment)
                 }
                 binding.gps.id -> {
                     Utility.saveLocationToSharedPref(requireContext(), Utility.LOCATION_KEY, Utility.GPS)
+                    refreshFragment()
+                }
+
+            }
+        }
+    }
+
+    private fun changeNotification(){
+        binding.radioGroupNotification.setOnCheckedChangeListener { radioGroup, checkedButtonId ->
+            when (checkedButtonId) {
+                binding.notifyEnabled.id -> {
+                    Utility.saveNotificationToSharedPref(requireContext(), Utility.NOTIFICATION_KEY, Utility.notification)
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    refreshFragment()
+                }
+                binding.notifyNotEnabled.id -> {
+                    Utility.saveNotificationToSharedPref(requireContext(), Utility.NOTIFICATION_KEY, Utility.alert)
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    refreshFragment()
                 }
 
             }
@@ -117,6 +139,7 @@ class SettingFragment : Fragment() {
         checkLanguage()
         checkUnit()
         checkLocation()
+        checkNotfication()
     }
 
     private fun initViewModel(){
@@ -151,6 +174,13 @@ class SettingFragment : Fragment() {
             binding.map.isChecked=true
         }else{
             binding.gps.isChecked=true
+        }
+    }
+    private fun checkNotfication(){
+        if(SharedPrefData.notification== Utility.notification){
+            binding.notifyEnabled.isChecked=true
+        }else{
+            binding.notifyNotEnabled.isChecked=true
         }
     }
 }

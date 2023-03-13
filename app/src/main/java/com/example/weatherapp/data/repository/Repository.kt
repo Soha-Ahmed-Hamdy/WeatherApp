@@ -1,5 +1,6 @@
 package com.example.weatherapp.data.repository
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
@@ -23,7 +24,7 @@ class Repository(
     private val remoteDataSource: DataSource,
     private val localDataSource: DataSource,
     private val context: Context
-) {
+) : RepositoryInterface {
     companion object{
         @Volatile
         private var INSTANCE: Repository?=null
@@ -48,7 +49,7 @@ class Repository(
 
     }
 
-    fun getStates() {
+    override fun getStates() {
         SharedPrefData.setupSharedPrefrences(context)
     }
 
@@ -56,17 +57,18 @@ class Repository(
         getStates()
         emit(
             remoteDataSource.getRoot(
-                SharedPrefData.latitude.toDouble(), SharedPrefData.longitude.toDouble()
+                SharedPrefData.latitude.toDouble()
+                , SharedPrefData.longitude.toDouble()
                 //,"bec88e8dd2446515300a492c3862a10e"
-                //,"d9abb2c1d05c5882e937cffd1ecd4923"
+                ,"d9abb2c1d05c5882e937cffd1ecd4923"
                 //,"44c59959fbe6086cb77fb203967bbc0c"
                 //,"f112a761188e9c22cdf3eb3a44597b00"
-                , "489da633b031b5fa008c48ee2deaf025", SharedPrefData.unit, SharedPrefData.language
+                //, "489da633b031b5fa008c48ee2deaf025", SharedPrefData.unit, SharedPrefData.language
             ).body()!!
         )
     }
 
-    suspend fun getFavDetails(lat: Double, long: Double): Flow<Root?> {
+    override suspend fun getFavDetails(lat: Double, long: Double): Flow<Root?> {
         return flow {
             val result = remoteDataSource.getRoot(lat, long).body()!!
             emit(result)
@@ -74,7 +76,7 @@ class Repository(
 
     }
 
-    suspend fun getHomeData(): Flow<Root>? {
+    override suspend fun getHomeData(): Flow<Root>? {
 
         if (checkForInternet()) {
             return getRoot().also {
@@ -90,15 +92,15 @@ class Repository(
 
     }
 
-    suspend fun insertFavCountry(favPlace: FavouritePlace) {
+    override suspend fun insertFavCountry(favPlace: FavouritePlace) {
         localDataSource.insertFavourite(favPlace)
     }
 
-    suspend fun deleteFavCountry(favPlace: FavouritePlace) {
+    override suspend fun deleteFavCountry(favPlace: FavouritePlace) {
         localDataSource.deleteFavouritePlace(favPlace)
     }
 
-    fun getAllFavCountry() =
+    override fun getAllFavCountry() =
         localDataSource.allFavouriteWeather()
 
     private fun getLocalRoot() =
@@ -110,18 +112,18 @@ class Repository(
     private suspend fun insertRoot(root: Root) =
         localDataSource.insertRoot(root)
 
-    suspend fun insertAlert(alert: LocalAlert) {
+    override suspend fun insertAlert(alert: LocalAlert) {
         localDataSource.insertAlert(alert)
     }
 
-    suspend fun deleteAlert(alert: LocalAlert) {
+    override suspend fun deleteAlert(alert: LocalAlert) {
         localDataSource.deleteAlert(alert)
     }
 
-    fun getAllAlerts() =
+    override fun getAllAlerts() =
         localDataSource.allAlerts()
 
-    fun checkForInternet(): Boolean {
+    override fun checkForInternet(): Boolean {
 
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

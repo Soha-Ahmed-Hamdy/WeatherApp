@@ -25,6 +25,14 @@ companion object{
     const val GPS : String = "gps"
     const val LONGITUDE_KEY : String = "Longitude"
     const val LATITUDE_KEY : String = "Latitude"
+    const val NOTIFICATION_KEY : String = "Notification"
+    const val notification : String = "notify"
+    const val alert : String = "alert"
+    const val Theme_KEY : String = "Theme"
+    const val dark : String = "dark"
+    const val light : String = "light"
+    const val PLACE_KEY : String = "Place"
+
 
 
     fun checkUnit():String{
@@ -79,6 +87,13 @@ companion object{
         editor.putString(key, value)
         editor.apply()
     }
+    fun savePlaceToSharedPref(context: Context, key : String, value : String){
+        val editor : SharedPreferences.Editor = context.getSharedPreferences("Place",
+            AppCompatActivity.MODE_PRIVATE
+        ).edit()
+        editor.putString(key, value)
+        editor.apply()
+    }
 
     fun saveLatitudeToSharedPref(context: Context, key : String, value : Long){
         val editor : SharedPreferences.Editor = context.getSharedPreferences("Latitude",
@@ -98,6 +113,21 @@ companion object{
 
     fun saveLocationToSharedPref(context: Context, key : String, value : String){
         val editor : SharedPreferences.Editor = context.getSharedPreferences("Location",
+            AppCompatActivity.MODE_PRIVATE
+        ).edit()
+        editor.putString(key, value)
+        editor.apply()
+    }
+
+    fun saveNotificationToSharedPref(context: Context, key : String, value : String){
+        val editor : SharedPreferences.Editor = context.getSharedPreferences("Notification",
+            AppCompatActivity.MODE_PRIVATE
+        ).edit()
+        editor.putString(key, value)
+        editor.apply()
+    }
+    fun saveThemeToSharedPref(context: Context, key : String, value : String){
+        val editor : SharedPreferences.Editor = context.getSharedPreferences("Theme",
             AppCompatActivity.MODE_PRIVATE
         ).edit()
         editor.putString(key, value)

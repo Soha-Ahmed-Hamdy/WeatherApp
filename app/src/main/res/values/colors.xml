@@ -9,6 +9,13 @@
     <color name="white">#FFFFFFFF</color>
     <color name="orange">#F8DCBF</color>
     <color name="grey">#B1AFAC</color>
+    <color name="dark_purple">#4f3961</color>
+    <color name="pt_purple">#421a4a</color>
+    <color name="np_purple">#5a1851</color>
+    <color name="fosh_purple">#620756</color>
+    <color name="white_transparent">#80FFFFFF</color>
+    <color name="black_transparent">#801C1C1B</color>
     <color name="transparent">#80C1B9AD</color>
+
 
 </resources>

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 class RemoteDataSource(
-    private val api: Api
+    private val api: Api,
 ) : DataSource {
     override fun allAlerts(): Flow<List<LocalAlert>> {
         TODO("Not yet implemented")
@@ -61,5 +61,6 @@ class RemoteDataSource(
             lang
         )
     }
+
 
 }

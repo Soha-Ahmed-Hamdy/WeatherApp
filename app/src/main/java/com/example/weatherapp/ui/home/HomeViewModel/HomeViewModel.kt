@@ -3,11 +3,12 @@ package com.example.weatherapp.ui.home.HomeViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.data.repository.Repository
+import com.example.weatherapp.data.repository.RepositoryInterface
 import com.example.weatherapp.data.utils.ApiState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class HomeViewModel(var repository :Repository) : ViewModel() {
+class HomeViewModel(var repository :RepositoryInterface) : ViewModel() {
 
     private var _rootWeather= MutableStateFlow<ApiState>(ApiState.Loading)
     val rootWeather= _rootWeather.asStateFlow()

@@ -23,8 +23,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.weatherapp.R
 import com.example.weatherapp.data.model.FavouritePlace
 import com.example.weatherapp.data.repository.Repository
+import com.example.weatherapp.data.utils.Utility
 import com.example.weatherapp.ui.favourite.favouriteViewModel.FactoryFavouriteWeather
 import com.example.weatherapp.ui.favourite.favouriteViewModel.FavouriteViewModel
+import com.example.weatherapp.ui.home.HomeViewModel.FactoryHomeWeather
+import com.example.weatherapp.ui.home.HomeViewModel.HomeViewModel
 import com.example.weatherapp.ui.home.PERMISSION_ID
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
@@ -56,6 +59,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var repository=Repository.getRepositoryInstance(requireActivity().application)
+
+
         val mapFragment=childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)

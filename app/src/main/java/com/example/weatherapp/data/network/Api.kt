@@ -8,6 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+
 interface Api {
     @GET("onecall")
     suspend fun getRoot(
@@ -20,12 +21,15 @@ interface Api {
         , @Query("units") units: String= SharedPrefData.unit
         , @Query("lang") lang: String= SharedPrefData.language
     ): Response<Root>
+
 }
 object RetrofitHelper{
     const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
+
     val retrofit = Retrofit
         .Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .baseUrl(BASE_URL)
         .build()
+
 }

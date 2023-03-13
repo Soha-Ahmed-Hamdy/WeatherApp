@@ -9,6 +9,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.data.utils.LocaleManager
 
@@ -28,6 +29,12 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
+//        if(AppCompatDelegate.getDefaultNightMode()== AppCompatDelegate.MODE_NIGHT_NO){
+//            setTheme(R.style.Theme_WeatherAppDark)
+//        }else{
+//            setTheme(R.style.Theme_WeatherApp)
+//        }
+
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -37,6 +44,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home, R.id.nav_favourite, R.id.nav_alert,R.id.nav_setting
             ), drawerLayout
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }

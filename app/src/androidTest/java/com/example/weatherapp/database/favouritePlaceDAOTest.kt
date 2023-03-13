@@ -77,9 +77,9 @@ class favouritePlaceDAOTest {
 
         //When
         favDao.insertFavourite(data)
+        val result= favDao.allFavouriteWeather().first()
 
         //Then
-        val result= favDao.allFavouriteWeather().first()
         MatcherAssert.assertThat(result[0], IsNull.notNullValue())
 
     }

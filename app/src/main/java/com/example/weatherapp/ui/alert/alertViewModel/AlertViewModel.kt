@@ -21,7 +21,7 @@ class AlertViewModel(var repository : RepositoryInterface)  : ViewModel() {
         getAlerts()
 
     }
-    private fun getAlerts(){
+    fun getAlerts(){
         viewModelScope.launch (Dispatchers.IO){
             repository.getAllAlerts()
                 ?.catch {

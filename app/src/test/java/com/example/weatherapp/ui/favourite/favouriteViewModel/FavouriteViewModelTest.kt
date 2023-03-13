@@ -35,21 +35,21 @@ class FavouriteViewModelTest {
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
-    private var favList:MutableList<FavouritePlace> = mutableListOf<FavouritePlace>(
-        FavouritePlace(56.12,12.12,"",""),
-        FavouritePlace(58.12,15.12,"",""),
-        FavouritePlace(59.12,16.12,"",""),
-        FavouritePlace(52.12,19.12,"","")
+    private var favList: MutableList<FavouritePlace> = mutableListOf<FavouritePlace>(
+        FavouritePlace(56.12, 12.12, "", ""),
+        FavouritePlace(58.12, 15.12, "", ""),
+        FavouritePlace(59.12, 16.12, "", ""),
+        FavouritePlace(52.12, 19.12, "", "")
     )
     private var alertList: MutableList<LocalAlert> = mutableListOf<LocalAlert>(
-        LocalAlert(133,465,"",586),
-        LocalAlert(153,1655,"",1235),
-        LocalAlert(193,988,"",9612),
-        LocalAlert(132,3215,"",3245)
+        LocalAlert(133, 465, "", 586),
+        LocalAlert(153, 1655, "", 1235),
+        LocalAlert(193, 988, "", 9612),
+        LocalAlert(132, 3215, "", 3245)
 
     )
     private var rootList: MutableList<Root> = mutableListOf<Root>(
-        Root(46,65.0,54.0,"asdjadsk",565,null, emptyList(), emptyList(), emptyList())
+        Root(46, 65.0, 54.0, "asdjadsk", 565, null, emptyList(), emptyList(), emptyList())
     )
     private lateinit var repository: RepositoryInterface
     private lateinit var favouriteViewModel: FavouriteViewModel
@@ -57,13 +57,13 @@ class FavouriteViewModelTest {
 
     @Before
     fun setUp() {
-        repository= FakeRepository(
+        repository = FakeRepository(
             favList,
             alertList,
             rootList[0]
 
         )
-        favouriteViewModel= FavouriteViewModel(repository)
+        favouriteViewModel = FavouriteViewModel(repository)
 
 
     }
@@ -74,59 +74,72 @@ class FavouriteViewModelTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun getFavWeather_getItems_sameFakeData() = runTest {
+    fun getFavWeather_getItems_sameFakeData() = runBlockingTest {
         //When
         favouriteViewModel.getFav()
-        var data:List<FavouritePlace> = emptyList()
-        favouriteViewModel.favWeather.collectLatest {
-            when (it) {
-                is RoomState.Loading -> {
+         var data:List<FavouritePlace> = emptyList()
+        val result = favouriteViewModel.favWeather.first()
 
-                }
-                is RoomState.Success -> {
+        when (result) {
+            is RoomState.Loading -> {
 
-                    data  = it.countrysFav
-                }
-                is RoomState.Failure -> {
+            }
+            is RoomState.Success -> {
 
-                }
+                data = result.countrysFav
+            }
+            is RoomState.Failure -> {
+
             }
         }
+    //Then
+    MatcherAssert.assertThat(data.size,`is`(4) )
+}
 
-        //Then
+@Test
+fun insertFav_item_checkSize() = runTest {
+    //When
+    favouriteViewModel.insertFav(favList[0])
+    var data:List<FavouritePlace> = emptyList()
+    val result = favouriteViewModel.favWeather.first()
+    when (result) {
+        is RoomState.Loading -> {
 
+        }
+        is RoomState.Success -> {
 
+            data = result.countrysFav
+        }
+        is RoomState.Failure -> {
 
-        MatcherAssert.assertThat(favList.size,`is`(4) )
+        }
     }
 
-    @Test
-    fun insertFav_item_checkSize() = runTest{
-        //When
-        favouriteViewModel.insertFav(favList[0])
+    //Then
+    MatcherAssert.assertThat(favList.size, `is`(5))
+}
 
-        //Then
-        MatcherAssert.assertThat(favList.size,`is`(5))
+@Test
+fun deleteFav_deleteItem_checkSize() = runBlockingTest{
+    //When
+    favouriteViewModel.deleteFav(favList[0])
+    var data:List<FavouritePlace> = emptyList()
+    val result = favouriteViewModel.favWeather.first()
+    val msg:String
+    when (result) {
+        is RoomState.Loading -> {
+
+        }
+        is RoomState.Success -> {
+
+            data = result.countrysFav
+        }
+        is RoomState.Failure -> {
+            msg= result.msg.toString()
+        }
     }
 
-    @Test
-    fun deleteFav() {
-        //When
-        favouriteViewModel.deleteFav(favList[0])
-
-        //Then
-        assertThat(favList.size,`is`(3))
-    }
-
-    @Test
-    fun checkConnectivity() {
-    }
-
-    @Test
-    fun getRepository() {
-    }
-
-    @Test
-    fun setRepository() {
-    }
+    //Then
+    assertThat(data.size, `is`(3))
+}
 }

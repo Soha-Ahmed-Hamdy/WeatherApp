@@ -121,12 +121,12 @@ class SettingFragment : Fragment() {
             when (checkedButtonId) {
                 binding.notifyEnabled.id -> {
                     Utility.saveNotificationToSharedPref(requireContext(), Utility.NOTIFICATION_KEY, Utility.notification)
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     refreshFragment()
                 }
                 binding.notifyNotEnabled.id -> {
                     Utility.saveNotificationToSharedPref(requireContext(), Utility.NOTIFICATION_KEY, Utility.alert)
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                     refreshFragment()
                 }
 

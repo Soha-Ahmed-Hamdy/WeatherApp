@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
+        <item name="colorCard">@color/orange</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/purple_700</item>
@@ -19,6 +20,8 @@
         <item name="colorPrimary">@color/dark_purple</item>
         <item name="colorPrimaryVariant">@color/fosh_purple</item>
         <item name="colorOnPrimary">@color/white_transparent</item>
+        <item name="colorCard">@color/white_transparent</item>
+
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/dark_purple</item>

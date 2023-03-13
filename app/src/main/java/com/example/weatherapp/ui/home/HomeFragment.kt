@@ -16,11 +16,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
+import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentHomeBinding
 import com.example.weatherapp.data.utils.ApiState
 import com.example.weatherapp.data.utils.SharedPrefData
@@ -59,8 +61,6 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -226,7 +226,7 @@ class HomeFragment : Fragment() {
                     address = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)?.get(0)?.adminArea.toString()
                     addressLocal= geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)?.get(0)?.locality.toString()
                     saveLatLong(lat.toLong(),long.toLong())
-                    if(addressLocal == null){
+                    if(addressLocal == "null"){
                         Utility.savePlaceToSharedPref(requireContext(), Utility.PLACE_KEY, address)
                     }else{
                         Utility.savePlaceToSharedPref(requireContext(), Utility.PLACE_KEY, address+"/"+addressLocal)

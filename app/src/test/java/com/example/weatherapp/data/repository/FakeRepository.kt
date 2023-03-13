@@ -1,8 +1,10 @@
 package com.example.weatherapp.data.repository
 
+import androidx.test.core.app.ApplicationProvider
 import com.example.weatherapp.data.model.FavouritePlace
 import com.example.weatherapp.data.model.LocalAlert
 import com.example.weatherapp.data.model.Root
+import com.example.weatherapp.data.utils.SharedPrefData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.junit.Assert.*
@@ -16,7 +18,7 @@ class FakeRepository(
 
 
     override fun getStates() {
-        TODO("Not yet implemented")
+        SharedPrefData.setupSharedPrefrences(ApplicationProvider.getApplicationContext())
     }
 
 

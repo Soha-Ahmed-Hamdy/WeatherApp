@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<declare-styleable name="dt">
+    <attr name="colorPrimary" format="color"/>
+    <attr name="colorBackgroundFloating" format="color"/>
+    <attr name="colorCard" format="color"/>
 
+</declare-styleable>
 </resources>

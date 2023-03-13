@@ -29,11 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-//        if(AppCompatDelegate.getDefaultNightMode()== AppCompatDelegate.MODE_NIGHT_NO){
-//            setTheme(R.style.Theme_WeatherAppDark)
-//        }else{
-//            setTheme(R.style.Theme_WeatherApp)
-//        }
+
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView

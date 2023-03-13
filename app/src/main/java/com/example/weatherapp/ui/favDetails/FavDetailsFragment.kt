@@ -1,6 +1,7 @@
 package com.example.weatherapp.ui.favouriteDetails
 
 
+import android.location.Geocoder
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.example.weatherapp.data.utils.ApiState
 import com.example.weatherapp.data.utils.SharedPrefData
 import com.example.weatherapp.ui.home.homeAdapters.DayAdapter
 import com.example.weatherapp.ui.home.homeAdapters.HourAdapter
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -38,6 +40,9 @@ class FavDetailsFragment : Fragment() {
     lateinit var favDetailsViewModel: FavouriteDetailsViewModel
     private lateinit var progressIndicator:LottieAnimationView
     lateinit var countDownTime: TextView
+    private lateinit var address: String
+    private lateinit var localAddress: String
+    private lateinit var totalAddress: String
 
 
     private val binding get() = _binding!!
@@ -64,6 +69,20 @@ class FavDetailsFragment : Fragment() {
         fact= FactoryFavDetails(repository, favItemData.lat, favItemData.lon)
         favDetailsViewModel= ViewModelProvider(requireActivity(),fact).get(FavouriteDetailsViewModel::class.java)
         favDetailsViewModel.getFavRootDetails(favItemData.lat,favItemData.lon)
+
+        try{
+            var geoCoder = Geocoder(requireContext())
+            address = geoCoder.getFromLocation(favItemData.lat, favItemData.lon, 1)?.get(0)?.adminArea.toString()
+            localAddress= geoCoder.getFromLocation(favItemData.lat, favItemData.lon, 1)?.get(0)?.locality.toString()
+            if(localAddress == "null"){
+                totalAddress= address
+            }else{
+                totalAddress= "$address/$localAddress"
+
+            }
+        }catch (_: Exception){
+
+        }
 
 
         //lottie : https://assets6.lottiefiles.com/packages/lf20_ahY2hu.json
@@ -118,7 +137,7 @@ class FavDetailsFragment : Fragment() {
                                 Utility.convertNumbersToArabic(currentDayWeather.temp.toInt())+ Utility.checkUnit()
                             binding.todayImg.setImageResource(Utility.getWeatherStatusIcon(currentDayWeather.weather[0].icon))
                             binding.weatherMood.text=currentDayWeather.weather[0].description
-                            binding.cityName.text=it.weatherRoot.timezone
+                            binding.cityName.text=totalAddress
                         }
 
 

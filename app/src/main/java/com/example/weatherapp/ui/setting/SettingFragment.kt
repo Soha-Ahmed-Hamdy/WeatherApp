@@ -1,12 +1,17 @@
 package com.example.weatherapp.ui.setting
 
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.weatherapp.R
@@ -15,6 +20,7 @@ import com.example.weatherapp.data.utils.LocaleManager
 import com.example.weatherapp.data.utils.SharedPrefData
 import com.example.weatherapp.data.repository.Repository
 import com.example.weatherapp.data.utils.Utility
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 class SettingFragment : Fragment() {
@@ -42,6 +48,7 @@ class SettingFragment : Fragment() {
         changeTemperature()
         changeLocation()
         changeNotification()
+        changeTheme()
 
         return root
     }
@@ -121,12 +128,27 @@ class SettingFragment : Fragment() {
             when (checkedButtonId) {
                 binding.notifyEnabled.id -> {
                     Utility.saveNotificationToSharedPref(requireContext(), Utility.NOTIFICATION_KEY, Utility.notification)
-                    //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     refreshFragment()
                 }
                 binding.notifyNotEnabled.id -> {
                     Utility.saveNotificationToSharedPref(requireContext(), Utility.NOTIFICATION_KEY, Utility.alert)
-                    //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    refreshFragment()
+                }
+
+            }
+        }
+    }
+    private fun changeTheme(){
+        binding.radioGroupTheme.setOnCheckedChangeListener { radioGroup, checkedButtonId ->
+            when (checkedButtonId) {
+                binding.themeLight.id -> {
+                    Utility.saveThemeToSharedPref(requireContext(), Utility.Theme_KEY, Utility.light)
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    refreshFragment()
+                }
+                binding.themeDark.id -> {
+                    Utility.saveThemeToSharedPref(requireContext(), Utility.Theme_KEY, Utility.dark)
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     refreshFragment()
                 }
 
@@ -140,6 +162,7 @@ class SettingFragment : Fragment() {
         checkUnit()
         checkLocation()
         checkNotfication()
+        checkTheme()
     }
 
     private fun initViewModel(){
@@ -183,4 +206,12 @@ class SettingFragment : Fragment() {
             binding.notifyNotEnabled.isChecked=true
         }
     }
+    private fun checkTheme(){
+        if(SharedPrefData.theme== Utility.light){
+            binding.themeLight.isChecked=true
+        }else{
+            binding.themeDark.isChecked=true
+        }
+    }
+
 }

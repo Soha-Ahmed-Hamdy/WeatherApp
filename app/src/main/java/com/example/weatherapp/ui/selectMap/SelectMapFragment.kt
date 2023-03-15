@@ -181,7 +181,7 @@ class SelectMapFragment : DialogFragment() , OnMapReadyCallback {
             mMap.addMarker(
                 MarkerOptions()
                     .position(latLng)
-                    .title("Marker in Sydney")
+                    .title("Marker")
             )
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10f))
@@ -201,9 +201,9 @@ class SelectMapFragment : DialogFragment() , OnMapReadyCallback {
     fun confirmAlertLocation(lat: Double,long: Double, placeName: String) {
         val alert: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
 
-        alert.setTitle("Confirm Location")
-        alert.setMessage("Do You want to set Alert in${placeName}")
-        alert.setPositiveButton("Yes") {
+        alert.setTitle(R.string.confir_loc)
+        alert.setMessage(getString(R.string.ask_sel_map) + " ${placeName} ")
+        alert.setPositiveButton(getString(R.string.yes)) {
                 _: DialogInterface, _: Int ->
             registerObserver(placeName,lat.toLong(), long.toLong() )
             NavHostFragment.findNavController(this).popBackStack()

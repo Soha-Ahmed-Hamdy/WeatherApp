@@ -1,9 +1,12 @@
 package com.example.weatherapp.ui
 
+import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
@@ -15,6 +18,7 @@ import com.example.weatherapp.data.utils.Utility
 import com.example.weatherapp.data.repository.Repository
 import com.example.weatherapp.ui.alert.alertViewModel.AlertViewModel
 import com.example.weatherapp.ui.alert.alertViewModel.FactoryAlert
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -31,8 +35,10 @@ class AlertSpecificationFragment : DialogFragment() {
     private var endDate: Long=0
     private lateinit var timeToDatabase: String
     private var time: Long = 0
-
-
+    ////////////////////////////
+    // //////////////////////////
+    // //////////////////////////
+    private var timeFinal = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +66,7 @@ class AlertSpecificationFragment : DialogFragment() {
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("cityName")?.observe(
             viewLifecycleOwner) { result ->
-               binding.zonePicker.text=result
+            binding.zonePicker.text=result
         }
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Long>("lat")?.observe(
             viewLifecycleOwner) { result ->
@@ -87,17 +93,22 @@ class AlertSpecificationFragment : DialogFragment() {
             onClickTime()
         }
         binding.saveAlert.setOnClickListener {
+            val formatter = SimpleDateFormat("MMM dd, yyyy - EEE hh:mm a")
+            formatter.timeZone = TimeZone.getTimeZone("GMT+2")
+            val startTime = formatter.parse(timeFinal)
+            val utc = startTime?.time?.div(1000)
+
             alertViewModel.insertAlert(
                 LocalAlert(
-                time,
-                endDate,
-                binding.zonePicker.text.toString(),
-                startDate,
-                lat.toDouble(),
-                long.toDouble()
+                        utc!!,
+                        endDate,
+                        binding.zonePicker.text.toString(),
+                        startDate,
+                        lat.toDouble(),
+                        long.toDouble(),
+                    )
                 )
-            )
-            NavHostFragment.findNavController(this).popBackStack()
+                NavHostFragment.findNavController(this).popBackStack()
         }
         binding.zonePicker.setOnClickListener {
             NavHostFragment.findNavController(this).navigate(R.id.selectMapFragment2)
@@ -106,10 +117,10 @@ class AlertSpecificationFragment : DialogFragment() {
         return root
     }
 
-
-
     private fun onClickTime() {
         binding.timePickerShow.setOnTimeChangedListener { _, hour, minute ->
+            timeFinal = timeFinal + " " + formatTime(hour, minute)
+
             var hour = hour
             var am_pm = ""
             time = (TimeUnit.MINUTES.toSeconds(minute.toLong()) + TimeUnit.HOURS.toSeconds(hour.toLong()))
@@ -137,8 +148,6 @@ class AlertSpecificationFragment : DialogFragment() {
                 binding.timePickerShow.visibility = ViewGroup.GONE
             }
         }
-
-
     }
     private fun onClickFromDate(){
         val today = Calendar.getInstance()
@@ -146,6 +155,10 @@ class AlertSpecificationFragment : DialogFragment() {
             today.get(Calendar.DAY_OF_MONTH)
 
         ) { view, year, month, day ->
+
+            timeFinal = formatDate(year, month, day)
+
+
             val month = month + 1
             val msg = "$day-$month-$year"
             startDate = Utility.dateToLong(msg)
@@ -166,6 +179,34 @@ class AlertSpecificationFragment : DialogFragment() {
             binding.toPicker.text=message
             binding.datePickerShow.visibility = ViewGroup.GONE
         }
+
+    }
+    private fun formatDate(year: Int, month: Int, day: Int): String {
+        ////////////////////////////
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day)
+        val dateFormat = SimpleDateFormat("MMM dd, yyyy - EEE", Locale.getDefault())
+        return dateFormat.format(calendar.time)
+    }
+
+    private fun formatTime(hourOfDay: Int, minute: Int): String {
+        ////////////////////////////
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+        calendar.set(Calendar.MINUTE, minute)
+        val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        return dateFormat.format(calendar.time)
+    }
+    fun confirmAlertLocation() {
+        val alert: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
+
+        alert.setTitle(getString(R.string.alert_spec_header))
+        alert.setMessage(getString(R.string.alert_spec_body))
+        alert.setPositiveButton(getString(R.string.ok)) {
+                _: DialogInterface, _: Int ->
+        }
+        val dialog = alert.create()
+        dialog.show()
 
     }
 

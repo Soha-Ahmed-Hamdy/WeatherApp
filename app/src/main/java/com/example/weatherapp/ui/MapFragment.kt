@@ -204,10 +204,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     fun checkSaveToFavorite(favouritePlace: FavouritePlace, placeName: String) {
         val alert: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
 
-        alert.setTitle("Favorite")
+        alert.setTitle(getString(R.string.fav))
 
-        alert.setMessage("Do You want to save $placeName to your favorite")
-        alert.setPositiveButton("Save") {
+        alert.setMessage(getString(R.string.want_save) + " $placeName " +getString(R.string.to_fav))
+        alert.setPositiveButton(getString(R.string.save)) {
                 _: DialogInterface, _: Int ->
 
             val repository = Repository.getRepositoryInstance(requireActivity().application)
@@ -219,7 +219,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             favouriteViewModel.insertFav(favouritePlace)
 
             Toast.makeText(requireContext()
-                , "Data has been saved"
+                , getString(R.string.save_Done)
                 , Toast.LENGTH_SHORT).show()
         }
         val dialog = alert.create()

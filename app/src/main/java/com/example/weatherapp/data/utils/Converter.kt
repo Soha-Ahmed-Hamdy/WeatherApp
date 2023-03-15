@@ -36,21 +36,21 @@ class Converter {
     @TypeConverter
     fun fromStringToHourlyList(stringHourly : String) = Gson().fromJson(stringHourly, Array<Current>::class.java).toList()
 
-    @TypeConverter
-    fun fromAlertsToString(alerts: List<Alert>?): String {
-        if (!alerts.isNullOrEmpty()) {
-            return Gson().toJson(alerts)
-        }
-        return ""
-    }
-    @TypeConverter
-    fun fromStringToAlerts(alerts: String?): List<Alert> {
-        if (alerts.isNullOrEmpty()) {
-            return emptyList()
-        }
-        val listType = object : TypeToken<List<Alert?>?>() {}.type
-        return Gson().fromJson(alerts, listType)
-    }
+//    @TypeConverter
+//    fun fromAlertsToString(alerts: List<Alert>?): String {
+//        if (!alerts.isNullOrEmpty()) {
+//            return Gson().toJson(alerts)
+//        }
+//        return ""
+//    }
+//    @TypeConverter
+//    fun fromStringToAlerts(alerts: String?): List<Alert> {
+//        if (alerts.isNullOrEmpty()) {
+//            return emptyList()
+//        }
+//        val listType = object : TypeToken<List<Alert?>?>() {}.type
+//        return Gson().fromJson(alerts, listType)
+//    }
     @TypeConverter
     fun fromTimestamp(value: Long?): Calendar? {
         return value?.let { Calendar.getInstance().apply { timeInMillis = it } }
@@ -59,5 +59,19 @@ class Converter {
     @TypeConverter
     fun dateToTimestamp(calendar: Calendar?): Long? {
         return calendar?.timeInMillis
+    }
+    @TypeConverter
+    fun fromJsonAlertList(value: String): List<Alert>? {
+        return if (value.isNullOrEmpty()) {
+            null
+        } else {
+            val listType = object : TypeToken<List<Alert>>() {}.type
+            Gson().fromJson(value, listType)
+        }
+    }
+
+    @TypeConverter
+    fun toJsonAlertList(list: List<Alert>?): String {
+        return list?.let { Gson().toJson(it) } ?: ""
     }
 }

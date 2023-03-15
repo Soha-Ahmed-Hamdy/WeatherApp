@@ -7,6 +7,7 @@
     android:layout_marginVertical="65dp"
     android:layout_marginHorizontal="20dp"
     android:id="@+id/make_alert_dialog"
+    android:backgroundTint="@color/white_theme"
 
 
     >
@@ -25,12 +26,12 @@
             android:id="@+id/tv_make_alert_name"
             android:fontFamily="@font/lemon"
             android:text="@string/make_alert"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/alert_title"
             android:textSize="24sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
             app:layout_constraintTop_toBottomOf="@id/tv_make_alert_name"
@@ -47,7 +48,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="40dp"
             android:text="@string/from"
-            android:textColor="@color/grey"
+            android:textColor="@color/dialog_text"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/img_dialog" />
@@ -57,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:text="@string/to"
-            android:textColor="@color/grey"
+            android:textColor="@color/dialog_text"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="@id/from_text"
             app:layout_constraintTop_toBottomOf="@id/from_text" />
@@ -67,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:text="@string/time"
-            android:textColor="@color/grey"
+            android:textColor="@color/dialog_text"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="@id/from_text"
             app:layout_constraintTop_toBottomOf="@id/to_text" />
@@ -77,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:text="@string/zone"
-            android:textColor="@color/grey"
+            android:textColor="@color/dialog_text"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="@id/from_text"
             app:layout_constraintTop_toBottomOf="@id/time_text" />
@@ -90,7 +91,7 @@
             android:padding="10dp"
             android:background="@drawable/appbar_background"
             android:layout_marginEnd="20dp"
-            android:textColor="@color/purple_700"
+            android:textColor="@color/dialog_button"
             android:textSize="18sp"
             app:layout_constraintTop_toTopOf="@id/from_text"
             app:layout_constraintBottom_toBottomOf="@id/from_text"
@@ -104,7 +105,7 @@
             android:gravity="center"
             android:padding="10dp"
             android:background="@drawable/appbar_background"
-            android:textColor="@color/purple_700"
+            android:textColor="@color/dialog_button"
             android:textSize="18sp"
             app:layout_constraintTop_toTopOf="@id/to_text"
             app:layout_constraintBottom_toBottomOf="@id/to_text"
@@ -118,7 +119,7 @@
             android:gravity="center"
             android:padding="10dp"
             android:background="@drawable/appbar_background"
-            android:textColor="@color/purple_700"
+            android:textColor="@color/dialog_button"
             android:textSize="18sp"
             app:layout_constraintTop_toTopOf="@id/time_text"
             app:layout_constraintBottom_toBottomOf="@id/time_text"
@@ -133,7 +134,7 @@
             android:padding="10dp"
             android:layout_marginStart="20dp"
             android:background="@drawable/appbar_background"
-            android:textColor="@color/purple_700"
+            android:textColor="@color/dialog_button"
             android:textSize="18sp"
             app:layout_constraintTop_toTopOf="@id/zone_text"
             app:layout_constraintBottom_toBottomOf="@id/zone_text"

@@ -47,4 +47,26 @@
     <string name="to">الي: </string>
     <string name="time">التوقيت: </string>
     <string name="zone">المدينة: </string>
+    <string name="make_alert">انشاء منبه</string>
+    <string name="save">حفظ</string>
+    <string name="warning">تحذير</string>
+    <string name="no_alerts">لا يوجد منبهات</string>
+    <string name="at">في </string>
+    <string name="remove">مسح</string>
+    <string name="no_internet">لا يوجد اتصال بالانترنت</string>
+    <string name="theme">سمات</string>
+    <string name="light">وضع نهاري</string>
+    <string name="dark_mode">وضع ليلي</string>
+    <string name="alert_spec_header">بيانات مفقودة</string>
+    <string name="alert_spec_body">برجاء ادخال البيانات كاملة</string>
+    <string name="ok">موافقة</string>
+    <string name="confir_loc">تاكيد الموقع</string>
+    <string name="ask_sel_map">هل تريد تعيين منبه علي </string>
+    <string name="yes">نعم</string>
+    <string name="do_you">هل تريد </string>
+    <string name="to_be">ان يكون موقعك الحالي</string>
+    <string name="save_Done">تم حفظ البيانات</string>
+    <string name="fav">المفضلة</string>
+    <string name="want_save">هل تريد حفظ </string>
+    <string name="to_fav">الي المفضلة</string>
 </resources>

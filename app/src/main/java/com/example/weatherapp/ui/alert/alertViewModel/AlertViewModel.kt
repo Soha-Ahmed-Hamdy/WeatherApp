@@ -8,6 +8,7 @@ import com.example.weatherapp.data.repository.RepositoryInterface
 import com.example.weatherapp.data.utils.AlertState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -16,6 +17,9 @@ class AlertViewModel(var repository : RepositoryInterface)  : ViewModel() {
 
     private var _alert= MutableStateFlow<AlertState>(AlertState.Loading)
     val alert = _alert.asStateFlow()
+
+    private val _stateSingleAlert = MutableStateFlow<LocalAlert>(LocalAlert())
+    val stateSingleAlert= _stateSingleAlert.asStateFlow()
 
     init {
         getAlerts()

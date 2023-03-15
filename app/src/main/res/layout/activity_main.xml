@@ -8,12 +8,12 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-<!--    <ImageView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:src="@drawable/backgroundblue"-->
-<!--        android:scaleType="centerCrop"-->
-<!--        />-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:id="@+id/backgroundd"
+        />
 
     <include
         android:id="@+id/app_bar_main"

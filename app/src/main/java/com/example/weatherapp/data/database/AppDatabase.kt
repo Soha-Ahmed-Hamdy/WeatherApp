@@ -14,7 +14,7 @@ import com.example.weatherapp.data.utils.Converter
     , FavouritePlace::class
     , LocalAlert::class
                      ]
-    ,version = 1,
+    ,version = 2,
 exportSchema = false)
 
 @TypeConverters(Converter::class)

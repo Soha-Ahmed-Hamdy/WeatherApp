@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.databinding.AlertSavedItemBinding
 import com.example.weatherapp.data.model.LocalAlert
 import com.example.weatherapp.data.utils.Utility
+import com.example.weatherapp.data.utils.Utility.Companion.dayConverterToString
+import com.example.weatherapp.data.utils.Utility.Companion.timeConverterToString
 
-class AlertAdapter(private val alerts: List<LocalAlert>
+class AlertAdapter(val context: Context,private val alerts: List<LocalAlert>
                       , var listener: (LocalAlert) -> Unit
 
 ) : RecyclerView.Adapter<AlertAdapter.ViewHolder>() {
@@ -25,11 +27,16 @@ class AlertAdapter(private val alerts: List<LocalAlert>
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.fromMeasure.text = Utility.longToDate(alerts[position].start)
-        holder.binding.toMeasure.text = Utility.longToDate(alerts[position].end)
-        holder.binding.timeMeasure.text = Utility.timeStampToHour(alerts[position].time)
+        holder.binding.fromMeasure.text = alerts[position].start?.let { Utility.longToDate(it) }
+        holder.binding.toMeasure.text = alerts[position].end?.let { Utility.longToDate(it) }
+        holder.binding.timeMeasure.text = alerts[position].time?.let { Utility.timeStampToHour(it) }
         holder.binding.zoneMeasure.text = alerts[position].zoneName
-        holder.binding.delIcon.setOnClickListener { alerts[position].let { listener(it) } }
+        holder.binding.delIcon.setOnClickListener { alerts[position].let { listener(it) }
+//            holder.binding.fromMeasure.text = "${ dayConverterToString(alerts[position].start,context) }   "
+//            holder.binding.timeMeasure.text = "${ timeConverterToString(alerts[position].start,context) } "
+//            holder.binding.toMeasure.text = "${ dayConverterToString(alerts[position].end,context) }"
+
+        }
 
     }
 

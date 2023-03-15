@@ -1,13 +1,16 @@
 package com.example.weatherapp.data.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherapp.R
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class Utility {
 companion object{
@@ -232,5 +235,25 @@ companion object{
         val date = "$hour:$min $am_pm"
         return date
     }
+
+    @SuppressLint("SimpleDateFormat")
+    fun dayConverterToString(dt: Long,context: Context): String? {
+        val timeStamp = Date(TimeUnit.SECONDS.toMillis(dt))
+        return SimpleDateFormat("dd MMM",getCurrentLocale(context)).format(timeStamp)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun timeConverterToString(dt: Long,context: Context): String? {
+        val timeStamp = Date(TimeUnit.SECONDS.toMillis(dt))
+        return SimpleDateFormat("hh:mm aa",getCurrentLocale(context)).format(timeStamp)
+    }
+    fun getCurrentLocale(context: Context): Locale? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            context.resources.configuration.locales[0]
+        } else {
+            context.resources.configuration.locale
+        }
+    }
+
 }
 }

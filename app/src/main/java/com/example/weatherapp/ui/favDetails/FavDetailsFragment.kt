@@ -124,7 +124,7 @@ class FavDetailsFragment : Fragment() {
                             binding.todayTemp.text=currentDayWeather.temp.toInt().toString()+ Utility.checkUnit()
                             binding.todayImg.setImageResource(Utility.getWeatherStatusIcon(currentDayWeather.weather[0].icon))
                             binding.weatherMood.text=currentDayWeather.weather[0].description
-                            binding.cityName.text=it.weatherRoot.timezone
+                            binding.cityName.text=totalAddress
                         }
                         else if(SharedPrefData.language == Utility.Language_AR_Value){
                             binding.humidityMeasure.text= Utility.convertNumbersToArabic(currentDayWeather.humidity)+"٪ "

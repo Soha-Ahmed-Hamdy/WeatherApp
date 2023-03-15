@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="150dp"
         android:fontFamily="@font/lemon"
-        android:textColor="@color/purple_500"
+        android:textColor="@color/alert_title"
         android:text="@string/loading"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,22 +50,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:cardCornerRadius="125dp"
+                app:cardElevation="0dp"
                 android:backgroundTint="@color/purple_700">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <TextView
                         android:id="@+id/city_name"
                         android:drawableStart="@drawable/location"
-                        android:layout_width="wrap_content"
+                        android:layout_width="200dp"
+                        android:gravity="center"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
-                        android:layout_marginEnd="10dp"
-                        android:paddingStart="2dp"
-                        android:maxLines="1"
                         android:textColor="@color/white"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:fontFamily="@font/lemon"
                         app:layout_constraintBottom_toTopOf="@id/weather_mood"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +88,7 @@
                         android:id="@+id/today_temp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:textSize="24sp"
+                        android:textSize="30sp"
                         android:fontFamily="@font/lemon"
                         android:textColor="@color/white"
                         app:layout_constraintTop_toBottomOf="@+id/weather_mood"
@@ -146,6 +145,7 @@
                 android:id="@+id/more_details_card"
                 app:cardCornerRadius="50dp"
                 android:layout_margin="10dp"
+                app:cardElevation="0dp"
                 android:backgroundTint="@color/orange"
                 app:layout_constraintTop_toBottomOf="@id/recycler_days"
                 app:layout_constraintEnd_toEndOf="parent"

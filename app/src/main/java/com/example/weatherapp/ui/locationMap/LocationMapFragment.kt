@@ -202,17 +202,16 @@ class LocationMapFragment : Fragment() , OnMapReadyCallback {
     fun confirmDesiredLocation(lat: Double,long: Double, placeName: String) {
         val alert: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
 
-        alert.setTitle("Confirm Location")
-
-        alert.setMessage("Do You want $placeName to be current Location")
-        alert.setPositiveButton("Save") {
+        alert.setTitle(R.string.confir_loc)
+        alert.setMessage(getString(R.string.do_you) + " $placeName " + getString(R.string.to_be))
+        alert.setPositiveButton(getString(R.string.save)) {
                 _: DialogInterface, _: Int ->
             saveLatLong(lat.toLong(),long.toLong())
             Navigation.findNavController(requireView())
                 .navigate(R.id.nav_home)
 
             Toast.makeText(requireContext()
-                , "Data has been saved"
+                , getString(R.string.save_Done)
                 , Toast.LENGTH_SHORT).show()
         }
         val dialog = alert.create()

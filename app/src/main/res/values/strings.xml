@@ -48,4 +48,24 @@
     <string name="zone">Zone: </string>
     <string name="make_alert">Make Alert</string>
     <string name="save">Save</string>
+    <string name="warning">Warning</string>
+    <string name="no_alerts">No Alerts</string>
+    <string name="at">at</string>
+    <string name="remove">remove</string>
+    <string name="no_internet">No Internet Connection</string>
+    <string name="theme">Theme</string>
+    <string name="light">Light Mode</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="alert_spec_header">Data Missing</string>
+    <string name="alert_spec_body">Please Enter Full Alert Data</string>
+    <string name="ok">Ok</string>
+    <string name="confir_loc">Confirm Location</string>
+    <string name="ask_sel_map">Do You want to set Alert in</string>
+    <string name="yes">Yes</string>
+    <string name="do_you">Do You want</string>
+    <string name="to_be">to be current Location</string>
+    <string name="save_Done">Data has been saved</string>
+    <string name="fav">Favorite</string>
+    <string name="want_save">Do You want to save</string>
+    <string name="to_fav">to your favorite</string>
 </resources>

@@ -15,4 +15,13 @@ interface AlertDAO {
 
     @Delete
     suspend fun deleteAlert(alert: LocalAlert)
+
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    suspend fun insertAlert(alert: LocalAlert): Long
+//
+//    @Query("DELETE FROM LocalAlert WHERE id= : id")
+//    suspend fun deleteAlert(id: Int)
+
+//    @Query("SELECT * FROM LocalAlert WHERE id= : id")
+//    suspend fun getAlert(id: Int):LocalAlert
 }

@@ -138,15 +138,29 @@ data class Alert(
 @Entity
 data class LocalAlert(
 
-    val time: Long,
-    val end: Long,
-    val zoneName: String,
-    val start: Long,
-    val lattuide: Double=0.0,
-    val longtuide: Double=0.0
+    var time: Long?=null,
+    var end: Long?=null,
+    var zoneName: String?=null,
+    var start: Long?=null,
+    var lattuide: Double=0.0,
+    var longtuide: Double=0.0,
 ) : java.io.Serializable{
 
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
 }
+
+//@Entity(tableName = "AlertsTable", primaryKeys = ["idHashLongFromLonLatStartStringEndStringAlertType"])
+//data class AlertItem(
+//    val address: String,
+//    val longitudeString: String,
+//    val latitudeString: String,
+//    val startString: String,
+//    val endString: String,
+//    val startDT: Int,
+//    val endDT: Int,
+//    val idHashLongFromLonLatStartStringEndStringAlertType: Long,
+//    val alertType: String,
+//    val timeAdded: Long
+//)

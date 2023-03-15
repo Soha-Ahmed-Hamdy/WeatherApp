@@ -47,6 +47,7 @@
                 android:fontFamily="@font/lemon"
                 android:text="@string/day_status"
                 android:textStyle="bold"
+                android:textSize="14sp"
                 android:textColor="@color/white"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -94,9 +94,9 @@ class MainActivity : AppCompatActivity() {
                     }
                     is AlertState.Success -> {
 
-                            it.alertsData.forEach {
-                                alertsManager.createAlert(it)
-                            }
+                        it.alertsData.forEach {
+                            alertsManager.createAlert(it)
+                        }
                     }
                     is AlertState.Failure -> {
 

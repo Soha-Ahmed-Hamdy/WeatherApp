@@ -85,7 +85,6 @@ class SettingFragment : Fragment() {
 
         }
     }
-
     private fun changeTemperature(){
         binding.radioGroupTemp.setOnCheckedChangeListener { radioGroup, checkedButtonId ->
             when (checkedButtonId) {
@@ -191,7 +190,6 @@ class SettingFragment : Fragment() {
             binding.arabic.isChecked=true
         }
     }
-
     private fun checkLocation(){
         if(SharedPrefData.location== Utility.MAP){
             binding.map.isChecked=true

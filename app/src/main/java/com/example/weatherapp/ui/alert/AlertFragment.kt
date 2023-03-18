@@ -55,8 +55,10 @@ class AlertFragment : Fragment() {
         _binding = FragmentAlertBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val repository = Repository.getRepositoryInstance(requireActivity().application)
         checkOverlayPermission()
+
+        val repository = Repository.getRepositoryInstance(requireActivity().application)
+
         fact = FactoryAlert(repository)
         alertViewModel =
             ViewModelProvider(requireActivity(), fact).get(AlertViewModel::class.java)

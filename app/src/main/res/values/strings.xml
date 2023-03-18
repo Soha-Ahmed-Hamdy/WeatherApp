@@ -68,4 +68,7 @@
     <string name="fav">Favorite</string>
     <string name="want_save">Do You want to save</string>
     <string name="to_fav">to your favorite</string>
+    <string name="choose">Choose Time</string>
+    <string name="full">Please Enter full Data</string>
+    <string name="date_warning">End data muct be after start data</string>
 </resources>

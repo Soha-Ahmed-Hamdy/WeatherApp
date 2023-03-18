@@ -38,7 +38,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-const val PERMISSION_ID=40
+const val PERMISSION_ID = 40
+
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -49,10 +50,10 @@ class HomeFragment : Fragment() {
     private lateinit var progressIndicator: LottieAnimationView
     lateinit var countDownTime: TextView
     lateinit var mFusedLocationClient: FusedLocationProviderClient
-    var lat : Double = 30.6210725
-    var long : Double = 32.2687095
+    var lat: Double = 30.6210725
+    var long: Double = 32.2687095
     var address: String = ""
-    var addressLocal : String=""
+    var addressLocal: String = ""
 
     private val binding get() = _binding!!
 
@@ -64,32 +65,32 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        mFusedLocationClient= LocationServices.getFusedLocationProviderClient(requireActivity())
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         getLastLocation()
 
-        progressIndicator=binding.indicator
+        progressIndicator = binding.indicator
         countDownTime = binding.tvIndicator
 
-        val repository=Repository.getRepositoryInstance(requireActivity().application)
+        val repository = Repository.getRepositoryInstance(requireActivity().application)
 
-        fact= FactoryHomeWeather(repository)
-        homeViewModel= ViewModelProvider(requireActivity(),fact).get(HomeViewModel::class.java)
-        homeViewModel.getRootHome()
+        fact = FactoryHomeWeather(repository)
+        homeViewModel = ViewModelProvider(requireActivity(), fact).get(HomeViewModel::class.java)
         homeViewModel.getStates()
         Utility.checkUnit()
+        homeViewModel.getRootHome()
 
         lifecycleScope.launch {
             homeViewModel.rootWeather.collectLatest {
-                when (it){
-                    is ApiState.Loading->{
+                when (it) {
+                    is ApiState.Loading -> {
                         disableViews()
                         delay(3000)
                     }
-                    is ApiState.Success->{
+                    is ApiState.Success -> {
 
-                        if (SharedPrefData.language== Utility.Language_EN_Value){
+                        if (SharedPrefData.language == Utility.Language_EN_Value) {
                             countDownTime.text = "Finished !!"
-                        }else{
+                        } else {
                             countDownTime.text = "تم التحميل"
                         }
 
@@ -99,33 +100,44 @@ class HomeFragment : Fragment() {
                         binding.tvIndicator.visibility = View.GONE
 
                         dayAdapter = DayAdapter(it.weatherRoot!!.daily)
-                        binding.recyclerDays.adapter=dayAdapter
+                        binding.recyclerDays.adapter = dayAdapter
 
                         hourAdapter = HourAdapter(it.weatherRoot.hourly)
-                        binding.recyclerHour.adapter=hourAdapter
+                        binding.recyclerHour.adapter = hourAdapter
 
-                        if(SharedPrefData.language == Utility.Language_EN_Value){
-                            binding.humidityMeasure.text=it.weatherRoot.current!!.humidity.toString()+" %"
-                            binding.cloudMeasure.text=it.weatherRoot.current.clouds.toString()+" %"
-                            binding.windMeasure.text=it.weatherRoot.current.windSpeed.toString()+" m/s"
-                            binding.pressureMeasure.text=it.weatherRoot.current.pressure.toString()+" hpa"
-                            binding.violateMeasure.text=it.weatherRoot.current.uvi.toString()
-                            binding.visibilityMeasure.text=it.weatherRoot.current.visibility.toString()+" m"
-                            binding.todayTemp.text=it.weatherRoot.current.temp.toInt().toString()+ Utility.checkUnit()
+                        if (SharedPrefData.language == Utility.Language_EN_Value) {
+                            binding.humidityMeasure.text =
+                                it.weatherRoot.current!!.humidity.toString() + " %"
+                            binding.cloudMeasure.text =
+                                it.weatherRoot.current.clouds.toString() + " %"
+                            binding.windMeasure.text =
+                                it.weatherRoot.current.windSpeed.toString() + " m/s"
+                            binding.pressureMeasure.text =
+                                it.weatherRoot.current.pressure.toString() + " hpa"
+                            binding.violateMeasure.text = it.weatherRoot.current.uvi.toString()
+                            binding.visibilityMeasure.text =
+                                it.weatherRoot.current.visibility.toString() + " m"
+                            binding.todayTemp.text =
+                                it.weatherRoot.current.temp.toInt().toString() + Utility.checkUnit()
                             binding.todayImg.setImageResource(Utility.getWeatherStatusIcon(it.weatherRoot.current.weather[0].icon))
-                            binding.weatherMood.text=it.weatherRoot.current.weather[0].description
+                            binding.weatherMood.text = it.weatherRoot.current.weather[0].description
                             binding.cityName.text = SharedPrefData.place
 
-                        }
-                        else if(SharedPrefData.language == Utility.Language_AR_Value){
-                            binding.humidityMeasure.text = Utility.convertNumbersToArabic(it.weatherRoot!!.current!!.humidity)+"٪ "
-                            binding.cloudMeasure.text = Utility.convertNumbersToArabic(it.weatherRoot.current!!.clouds)+"٪ "
-                            binding.windMeasure.text = Utility.convertNumbersToArabic(it.weatherRoot.current.windSpeed)+" م/ث"
-                            binding.pressureMeasure.text = Utility.convertNumbersToArabic(it.weatherRoot.current.pressure)+" هيكتوباسكال"
-                            binding.violateMeasure.text = Utility.convertNumbersToArabic(it.weatherRoot.current.uvi)
-                            binding.visibilityMeasure.text = Utility.convertNumbersToArabic(it.weatherRoot.current.visibility)+" م"
-                            binding.todayTemp.text=
-                                Utility.convertNumbersToArabic(it.weatherRoot.current.temp.toInt())+ Utility.checkUnit()
+                        } else if (SharedPrefData.language == Utility.Language_AR_Value) {
+                            binding.humidityMeasure.text =
+                                Utility.convertNumbersToArabic(it.weatherRoot!!.current!!.humidity) + "٪ "
+                            binding.cloudMeasure.text =
+                                Utility.convertNumbersToArabic(it.weatherRoot.current!!.clouds) + "٪ "
+                            binding.windMeasure.text =
+                                Utility.convertNumbersToArabic(it.weatherRoot.current.windSpeed) + " م/ث"
+                            binding.pressureMeasure.text =
+                                Utility.convertNumbersToArabic(it.weatherRoot.current.pressure) + " هيكتوباسكال"
+                            binding.violateMeasure.text =
+                                Utility.convertNumbersToArabic(it.weatherRoot.current.uvi)
+                            binding.visibilityMeasure.text =
+                                Utility.convertNumbersToArabic(it.weatherRoot.current.visibility) + " م"
+                            binding.todayTemp.text =
+                                Utility.convertNumbersToArabic(it.weatherRoot.current.temp.toInt()) + Utility.checkUnit()
                             binding.todayImg.setImageResource(Utility.getWeatherStatusIcon(it.weatherRoot.current.weather[0].icon))
                             binding.weatherMood.text = it.weatherRoot.current.weather[0].description
                             binding.cityName.text = SharedPrefData.place
@@ -137,8 +149,9 @@ class HomeFragment : Fragment() {
                         initViews()
 
                     }
-                    is ApiState.Failure->{
-                        Toast.makeText(requireContext(),"Failure ${it.msg}", Toast.LENGTH_LONG).show()
+                    is ApiState.Failure -> {
+                        Toast.makeText(requireContext(), "Failure ${it.msg}", Toast.LENGTH_LONG)
+                            .show()
 
                     }
                 }
@@ -148,24 +161,21 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun checkPermission():Boolean{
+    private fun checkPermission(): Boolean {
         return ActivityCompat.checkSelfPermission(
             requireActivity(),
             Manifest.permission.ACCESS_COARSE_LOCATION
-        )== PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+        ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
             requireActivity(),
             Manifest.permission.ACCESS_COARSE_LOCATION
-        )== PackageManager.PERMISSION_GRANTED
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun requestPermission(){
-        ActivityCompat.requestPermissions(
-            requireActivity(),
+    private fun requestPermission() {
+        requestPermissions(
             arrayOf<String>(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ),
-            PERMISSION_ID
+                Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION
+            ), PERMISSION_ID
         )
     }
 
@@ -175,8 +185,8 @@ class HomeFragment : Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode== PERMISSION_ID){
-            if (grantResults[0]== PackageManager.PERMISSION_GRANTED){
+        if (requestCode == PERMISSION_ID) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLastLocation()
             }
         }
@@ -188,21 +198,23 @@ class HomeFragment : Fragment() {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
+
     @SuppressLint("MissingPermission")
-    private fun getLastLocation():Unit{
-        if (checkPermission()){
-            if (isLocationEnabled()){
+    private fun getLastLocation(): Unit {
+        if (checkPermission()) {
+            if (isLocationEnabled()) {
                 requestNewLocationData()
-            }else{
-                val intent= Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            } else {
+                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
             }
-        }else{
+        } else {
             requestPermission()
         }
     }
+
     @SuppressLint("MissingPermission")
-    private fun requestNewLocationData(){
+    private fun requestNewLocationData() {
         val mLocationRequest = LocationRequest()
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
         mLocationRequest.setInterval(300000)
@@ -212,46 +224,57 @@ class HomeFragment : Fragment() {
             Looper.myLooper()
         )
     }
-    private val mLocationCallback: LocationCallback = object: LocationCallback(){
+
+    private val mLocationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
-            val mLastLocation : Location? =locationResult.getLastLocation()
-            lat= mLastLocation?.latitude!!
-            long=mLastLocation?.longitude!!
+            val mLastLocation: Location? = locationResult.getLastLocation()
+            lat = mLastLocation?.latitude!!
+            long = mLastLocation?.longitude!!
+            homeViewModel.getRootHome()
 
-            if(SharedPrefData.location== Utility.GPS){
-                try{
+            if (SharedPrefData.location == Utility.GPS) {
+                try {
                     var geoCoder = Geocoder(requireContext())
-                    val latLng = LatLng(mLastLocation.latitude,mLastLocation.longitude)
-                    address = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)?.get(0)?.adminArea.toString()
-                    addressLocal= geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)?.get(0)?.locality.toString()
-                    saveLatLong(lat.toLong(),long.toLong())
-                    if(addressLocal == "null"){
+                    val latLng = LatLng(mLastLocation.latitude, mLastLocation.longitude)
+                    address = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+                        ?.get(0)?.adminArea.toString()
+                    addressLocal = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+                        ?.get(0)?.locality.toString()
+                    saveLatLong(lat.toLong(), long.toLong())
+                    if (addressLocal == "null") {
                         Utility.savePlaceToSharedPref(requireContext(), Utility.PLACE_KEY, address)
-                    }else{
-                        Utility.savePlaceToSharedPref(requireContext(), Utility.PLACE_KEY, address+"/"+addressLocal)
+                    } else {
+                        Utility.savePlaceToSharedPref(
+                            requireContext(),
+                            Utility.PLACE_KEY,
+                            address + "/" + addressLocal
+                        )
 
                     }
-                }catch (_: Exception){
+                } catch (_: Exception) {
 
                 }
             }
 
         }
     }
-    fun disableViews(){
+
+    fun disableViews() {
 
         binding.moreDetailsCard.visibility = View.GONE
         binding.todayForcastCard.visibility = View.GONE
 
     }
-    fun initViews(){
+
+    fun initViews() {
         binding.moreDetailsCard.visibility = View.VISIBLE
         binding.todayForcastCard.visibility = View.VISIBLE
 
     }
-    fun saveLatLong(lat : Long,long:Long){
-        Utility.saveLatitudeToSharedPref(requireContext(), Utility.LATITUDE_KEY,lat)
+
+    fun saveLatLong(lat: Long, long: Long) {
+        Utility.saveLatitudeToSharedPref(requireContext(), Utility.LATITUDE_KEY, lat)
         Utility.saveLongitudeToSharedPref(requireContext(), Utility.LONGITUDE_KEY, long)
 
     }

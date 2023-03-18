@@ -69,4 +69,6 @@
     <string name="fav">المفضلة</string>
     <string name="want_save">هل تريد حفظ </string>
     <string name="to_fav">الي المفضلة</string>
+    <string name="choose">اختر التوقيت</string>
+    <string name="full">برجاء ادخال البيانات كاملة</string>
 </resources>

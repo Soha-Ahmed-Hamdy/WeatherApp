@@ -194,7 +194,6 @@ class SelectMapFragment : DialogFragment() , OnMapReadyCallback {
                 val address = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
                 confirmAlertLocation(latLng.latitude,latLng.longitude,address?.get(0)?.adminArea.toString())
             }
-
         }
     }
 

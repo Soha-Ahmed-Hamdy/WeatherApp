@@ -2,10 +2,10 @@ package com.example.weatherapp.ui
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
@@ -35,9 +35,6 @@ class AlertSpecificationFragment : DialogFragment() {
     private var endDate: Long=0
     private lateinit var timeToDatabase: String
     private var time: Long = 0
-    ////////////////////////////
-    // //////////////////////////
-    // //////////////////////////
     private var timeFinal = ""
 
 
@@ -93,13 +90,21 @@ class AlertSpecificationFragment : DialogFragment() {
             onClickTime()
         }
         binding.saveAlert.setOnClickListener {
-            val formatter = SimpleDateFormat("MMM dd, yyyy - EEE hh:mm a")
-            formatter.timeZone = TimeZone.getTimeZone("GMT+2")
-            val startTime = formatter.parse(timeFinal)
-            val utc = startTime?.time?.div(1000)
 
-            alertViewModel.insertAlert(
-                LocalAlert(
+            if(endDate < startDate){
+                makeWarning(getString(R.string.date_warning),getString(R.string.ok))
+            }else if(endDate==null || startDate== null || time== null || binding.zonePicker.text==null){
+                makeWarning(getString(R.string.full),getString(R.string.ok))
+            }else if(binding.fromPicker.text== "" || binding.toPicker.text== "" || binding.timePicker.text== "" || binding.zonePicker.text==""){
+                makeWarning(getString(R.string.full),getString(R.string.ok))
+            }else{
+                val formatter = SimpleDateFormat("MMM dd, yyyy - EEE hh:mm a")
+                formatter.timeZone = TimeZone.getTimeZone("GMT+2")
+                val startTime = formatter.parse(timeFinal)
+                val utc = startTime?.time?.div(1000)
+
+                alertViewModel.insertAlert(
+                    LocalAlert(
                         utc!!,
                         endDate,
                         binding.zonePicker.text.toString(),
@@ -109,6 +114,7 @@ class AlertSpecificationFragment : DialogFragment() {
                     )
                 )
                 NavHostFragment.findNavController(this).popBackStack()
+            }
         }
         binding.zonePicker.setOnClickListener {
             NavHostFragment.findNavController(this).navigate(R.id.selectMapFragment2)
@@ -182,33 +188,28 @@ class AlertSpecificationFragment : DialogFragment() {
 
     }
     private fun formatDate(year: Int, month: Int, day: Int): String {
-        ////////////////////////////
         val calendar = Calendar.getInstance()
         calendar.set(year, month, day)
         val dateFormat = SimpleDateFormat("MMM dd, yyyy - EEE", Locale.getDefault())
         return dateFormat.format(calendar.time)
     }
-
     private fun formatTime(hourOfDay: Int, minute: Int): String {
-        ////////////////////////////
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
         calendar.set(Calendar.MINUTE, minute)
         val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
         return dateFormat.format(calendar.time)
     }
-    fun confirmAlertLocation() {
-        val alert: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
 
-        alert.setTitle(getString(R.string.alert_spec_header))
-        alert.setMessage(getString(R.string.alert_spec_body))
-        alert.setPositiveButton(getString(R.string.ok)) {
-                _: DialogInterface, _: Int ->
-        }
+    private fun makeWarning(msg : String,btn:String){
+        val alert: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
+        alert.setTitle(getString(R.string.warning))
+
+        alert.setMessage(msg)
+        alert.setPositiveButton(btn) {
+                _: DialogInterface, _: Int -> }
         val dialog = alert.create()
         dialog.show()
-
     }
-
 
 }

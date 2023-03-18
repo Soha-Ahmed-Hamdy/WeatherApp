@@ -46,7 +46,7 @@ class AlertManager(private var context: Context) {
 
         val utc = alert.time
 
-        if ((utc!! *1000) > System.currentTimeMillis()) {
+        if ((utc!! * 1000) > System.currentTimeMillis()) {
 
             if (SharedPrefData.notification == Utility.notification) {
                 val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -72,7 +72,7 @@ class AlertManager(private var context: Context) {
                 }
                 alarmManager.setExactAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP,
-                    utc!! * 1000L,
+                    utc * 1000L,
                     pendingIntent
                 )
 
@@ -112,6 +112,29 @@ class AlertManager(private var context: Context) {
 
     }
 
+    @SuppressLint("ServiceCast")
+    fun cancelAlert(alert: LocalAlert) {
+        val alarmManager : AlarmManager= context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, BroadcastReceiverAlert::class.java)
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getBroadcast(
+                context,
+                alert.id.toInt(),
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
+        else {
+            PendingIntent.getBroadcast(
+                context,
+                alert.id.toInt(),
+                intent,
+                0
+            )
+        }
+        alarmManager.cancel(pendingIntent)
+    }
+
 }
 
 class BroadcastReceiverAlert : BroadcastReceiver() {
@@ -127,6 +150,7 @@ class BroadcastReceiverAlert : BroadcastReceiver() {
         val myCoroutineScope = CoroutineScope(Dispatchers.IO)
 
         if (SharedPrefData.notification == Utility.notification) {
+            Log.i("TAG", "onReceive: notification")
             val notificationManager =
                 context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -160,9 +184,16 @@ class BroadcastReceiverAlert : BroadcastReceiver() {
                     when (it) {
                         is ApiState.Success -> {
                             var event = context.getString(R.string.no_alerts)
-                            if (it.weatherRoot?.alerts?.get(0) != null) {
-                                event = context.getString(R.string.warning) + it.weatherRoot.alerts.get(0).event
+
+                            if (it.weatherRoot != null){
+                                if (it.weatherRoot.alerts.size != 0){
+                                    event = context.getString(R.string.warning) + it.weatherRoot.alerts.get(0).event
+                                }
                             }
+
+                            /*   if (it.weatherRoot?.alerts?.get(0) != null) {
+                                   event = context.getString(R.string.warning) + it.weatherRoot.alerts.get(0).event
+                               }*/
 
 
                             val removeNotificationIntent = Intent(context, RemoveNotificationReceiver::class.java).apply {
@@ -239,12 +270,12 @@ class BroadcastReceiverAlert : BroadcastReceiver() {
                             )
 
                             val builder = NotificationCompat.Builder(context!!, "channelId")
-                                .setSmallIcon(R.drawable.dialog_img)
+                                .setSmallIcon(R.drawable.appiconweater)
                                 .setContentTitle("Alert")
                                 .setContentText(event)
                                 .setPriority(NotificationCompat.PRIORITY_MAX)
                                 .setContentIntent(pendingIntent)
-                                .addAction(R.drawable.dialog_img, context?.getString(R.string.remove), removeNotificationPendingIntent)
+                                .addAction(R.drawable.appiconweater, context?.getString(R.string.remove), removeNotificationPendingIntent)
 
 
                             notificationManager.notify(0, builder.build())
@@ -258,7 +289,9 @@ class BroadcastReceiverAlert : BroadcastReceiver() {
 
         }
         else if (SharedPrefData.notification == Utility.alert) {
+            Toast.makeText(context,"onRecieve alert",Toast.LENGTH_SHORT).show()
 
+            Log.i("TAG", "onReceive: alert")
             var ringtone: Ringtone? = null
 
             myCoroutineScope.launch {
@@ -279,9 +312,16 @@ class BroadcastReceiverAlert : BroadcastReceiver() {
                     when (it) {
                         is ApiState.Success -> {
                             var event = context?.getString(R.string.no_alerts)
-                            if (it.weatherRoot?.alerts != null) {
-                                event = context?.getString(R.string.warning) + it.weatherRoot.alerts.get(0).event
+
+                            if (it.weatherRoot != null){
+                                if (it.weatherRoot.alerts.size != 0){
+                                    event = context.getString(R.string.warning) + it.weatherRoot.alerts.get(0).event
+                                }
                             }
+
+                            /*    if (it.weatherRoot?.alerts != null) {
+                                    event = context?.getString(R.string.warning) + it.weatherRoot.alerts.get(0).event
+                                }*/
 
                             val inflater = LayoutInflater.from(context)
                             val alertLayout = inflater.inflate(R.layout.dialog_alarm, null)
@@ -333,14 +373,14 @@ class BroadcastReceiverAlert : BroadcastReceiver() {
 
                             val params = WindowManager.LayoutParams(
 
-                                convertDPtoPX(300, context),
+                                convertDPtoPX(350, context),
                                 convertDPtoPX(400, context),
                                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
                                 PixelFormat.TRANSLUCENT
                             )
                             params.gravity = Gravity.TOP or Gravity.CENTER
-                            params.y = convertDPtoPX(200, context)
+                            params.y = convertDPtoPX(400, context)
 
                             val btnRemove = alarmLayout.findViewById<Button>(R.id.btn_cancel)
                             btnRemove.setOnClickListener {

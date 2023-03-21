@@ -49,9 +49,8 @@ class AlertViewModel(var repository : RepositoryInterface)  : ViewModel() {
         }
     }
 
-    private fun checkConnectivity():Boolean{
+    fun checkConnectivity():Boolean{
         return repository.checkForInternet()
     }
-
 
 }

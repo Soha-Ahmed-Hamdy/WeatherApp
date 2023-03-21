@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
@@ -108,10 +109,15 @@ class SettingFragment : Fragment() {
         binding.radioGroupLocation.setOnCheckedChangeListener { radioGroup, checkedButtonId ->
             when (checkedButtonId) {
                 binding.map.id -> {
-                    Utility.saveLocationToSharedPref(requireContext(), Utility.LOCATION_KEY, Utility.MAP)
-                    refreshFragment()
-                    Navigation.findNavController(root)
-                        .navigate(R.id.locationMapFragment)
+                    if (settingViewModel.checkConnectivity()) {
+                        Utility.saveLocationToSharedPref(requireContext(), Utility.LOCATION_KEY, Utility.MAP)
+                        refreshFragment()
+                        Navigation.findNavController(root)
+                            .navigate(R.id.locationMapFragment)
+                    }else{
+                        displayDialog()
+                    }
+
                 }
                 binding.gps.id -> {
                     Utility.saveLocationToSharedPref(requireContext(), Utility.LOCATION_KEY, Utility.GPS)
@@ -210,6 +216,24 @@ class SettingFragment : Fragment() {
         }else{
             binding.themeDark.isChecked=true
         }
+    }
+    private fun displayDialog() {
+        val alert: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
+        if(SharedPrefData.language== Utility.Language_EN_Value){
+            alert.setTitle("Warning")
+            alert.setMessage("Check Internet Connection")
+            alert.setPositiveButton("Cancel") { _: DialogInterface, _: Int ->
+            }
+        }else{
+            alert.setTitle("أنتبه !! ")
+            alert.setMessage("لا يوجد اتصال بالأنرنت الان")
+            alert.setPositiveButton("الغاء") { _: DialogInterface, _: Int ->
+            }
+        }
+
+
+        val dialog = alert.create()
+        dialog.show()
     }
 
 }

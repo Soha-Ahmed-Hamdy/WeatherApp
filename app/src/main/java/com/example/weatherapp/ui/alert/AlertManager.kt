@@ -319,10 +319,6 @@ class BroadcastReceiverAlert : BroadcastReceiver() {
                                 }
                             }
 
-                            /*    if (it.weatherRoot?.alerts != null) {
-                                    event = context?.getString(R.string.warning) + it.weatherRoot.alerts.get(0).event
-                                }*/
-
                             val inflater = LayoutInflater.from(context)
                             val alertLayout = inflater.inflate(R.layout.dialog_alarm, null)
 

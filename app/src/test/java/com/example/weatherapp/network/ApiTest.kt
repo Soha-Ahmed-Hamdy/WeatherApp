@@ -19,6 +19,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 
+// to run suspend fun that uses run blocking test
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class ApiTest {

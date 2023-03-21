@@ -12,4 +12,7 @@ class SettingViewModel (var repository : Repository) :ViewModel() {
     fun getStates(){
         repository.getStates()
     }
+    fun checkConnectivity():Boolean{
+        return repository.checkForInternet()
+    }
 }

@@ -31,8 +31,8 @@
     <string name="map">Map</string>
     <string name="celsius">Celsius</string>
     <string name="notification">Notification</string>
-    <string name="disable">Disable</string>
-    <string name="enable">Enable</string>
+    <string name="disable">Alerts</string>
+    <string name="enable">Notification</string>
     <string name="temperature">Temperature</string>
     <string name="ultra_violet">Ultra Violet</string>
     <string name="arabic">Arabic</string>
@@ -71,4 +71,6 @@
     <string name="choose">Choose Time</string>
     <string name="full">Please Enter full Data</string>
     <string name="date_warning">End data muct be after start data</string>
+    <string name="no_favourites_yet">No Favourites yet</string>
+    <string name="no_alert_yet">No alerts yet</string>
 </resources>

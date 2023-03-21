@@ -86,6 +86,10 @@ class FavouriteFragment : Fragment() {
                                 displayDialog()
                             }
                         }
+                        if(it.countrysFav.isEmpty()){
+                            binding.emptyMsg.visibility= View.VISIBLE
+
+                        }
                         favAdapter = FavouritAdapter(it.countrysFav, listener, listener2)
                         binding.favRecycler.adapter = favAdapter
 

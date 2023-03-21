@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RemoteViews
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -75,6 +76,11 @@ class AlertFragment : Fragment() {
                         val listener = { alert: LocalAlert ->
                             alertViewModel.deleteAlert(alert)
                         }
+                        if(it.alertsData.isEmpty()){
+                            binding.emptyMsg.visibility = View.VISIBLE
+                        }else{
+                            requireActivity().recreate()
+                        }
                         alertAdapter = AlertAdapter(requireContext(),it.alertsData, listener)
                         binding.alertRecycler.adapter = alertAdapter
 
@@ -89,9 +95,14 @@ class AlertFragment : Fragment() {
         }
 
         binding.floatingAddAlert.setOnClickListener {
+            if (alertViewModel.checkConnectivity()) {
+                Navigation.findNavController(root)
+                    .navigate(R.id.alertSpecificationFragment3)
+            }else{
+                displayDialog()
+            }
 
-            Navigation.findNavController(root)
-                .navigate(R.id.alertSpecificationFragment3)
+
         }
 
 
@@ -117,5 +128,23 @@ class AlertFragment : Fragment() {
             }
         }
 
+    }
+    private fun displayDialog() {
+        val alert: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
+        if(SharedPrefData.language== Utility.Language_EN_Value){
+            alert.setTitle("Warning")
+            alert.setMessage("Check Internet Connection")
+            alert.setPositiveButton("Cancel") { _: DialogInterface, _: Int ->
+            }
+        }else{
+            alert.setTitle("أنتبه !! ")
+            alert.setMessage("لا يوجد اتصال بالأنرنت الان")
+            alert.setPositiveButton("الغاء") { _: DialogInterface, _: Int ->
+            }
+        }
+
+
+        val dialog = alert.create()
+        dialog.show()
     }
 }

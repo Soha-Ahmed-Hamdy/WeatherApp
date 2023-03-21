@@ -32,8 +32,8 @@
     <string name="map">خريطة</string>
     <string name="celsius">مئوية</string>
     <string name="notification">الاشعارات</string>
-    <string name="disable">ايقاف</string>
-    <string name="enable">تفعيل</string>
+    <string name="disable">منبه</string>
+    <string name="enable">اشعار</string>
     <string name="temperature">درجة الحرارة</string>
     <string name="ultra_violet">مؤشر الاشعة</string>
     <string name="arabic">العربية</string>
@@ -71,4 +71,6 @@
     <string name="to_fav">الي المفضلة</string>
     <string name="choose">اختر التوقيت</string>
     <string name="full">برجاء ادخال البيانات كاملة</string>
+    <string name="date_warning">يجب ان يكون تاريخ النهاية بعد تاريخ البداية</string>
+    <string name="no_favourites_yet">لا يوجد مفضلة </string>
 </resources>

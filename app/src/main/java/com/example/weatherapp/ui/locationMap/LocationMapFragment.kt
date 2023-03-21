@@ -185,15 +185,23 @@ class LocationMapFragment : Fragment() , OnMapReadyCallback {
                 MarkerOptions().position(latLng).title("My Location")
 
             )
-                val geoCoder = Geocoder(requireContext())
-                val address = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-                if(address?.get(0)?.locality == null){
-                    Utility.savePlaceToSharedPref(requireContext(), Utility.PLACE_KEY, address?.get(0)?.adminArea.toString())
-                }else{
-                    Utility.savePlaceToSharedPref(requireContext(), Utility.PLACE_KEY, address?.get(0)?.adminArea.toString()+"/"+address?.get(0)?.locality.toString())
-                }
+                try{
+                    val geoCoder = Geocoder(requireContext())
+                    val address = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
 
-                confirmDesiredLocation(latLng.latitude,latLng.longitude,address?.get(0)?.adminArea.toString())
+
+                    if(address?.get(0)?.locality == null){
+                        Utility.savePlaceToSharedPref(requireContext(), Utility.PLACE_KEY, address?.get(0)?.adminArea.toString())
+                    }else{
+                        Utility.savePlaceToSharedPref(requireContext(), Utility.PLACE_KEY, address?.get(0)?.adminArea.toString()+"/"+address?.get(0)?.locality.toString())
+                    }
+
+                    confirmDesiredLocation(latLng.latitude,latLng.longitude,address?.get(0)?.adminArea.toString())
+
+
+                }catch (e : Exception){
+
+                }
             }
 
         }

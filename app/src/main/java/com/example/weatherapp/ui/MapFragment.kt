@@ -187,7 +187,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10f))
 
-            mMap.setOnMapLongClickListener {
+            mMap.setOnMapClickListener {
                     latLng ->    mMap.addMarker(
                         MarkerOptions()
                         .position(latLng)

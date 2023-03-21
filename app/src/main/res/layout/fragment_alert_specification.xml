@@ -157,35 +157,6 @@
             android:background="@drawable/save_alert"
             android:textColor="@color/white"
             />
-        <DatePicker
-            android:id="@+id/datePicker_show"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:datePickerMode="calendar"
-            android:background="@color/white"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:theme="@style/Theme.WeatherApp"
-            android:visibility="gone"
-            />
-        <TimePicker
-            android:id="@+id/timePicker_show"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:timePickerMode="clock"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:background="@color/white"
-            android:theme="@style/Theme.WeatherApp"
-            android:visibility="gone"
-
-            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

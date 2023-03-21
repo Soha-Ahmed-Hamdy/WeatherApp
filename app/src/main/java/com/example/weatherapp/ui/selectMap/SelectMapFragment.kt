@@ -186,7 +186,7 @@ class SelectMapFragment : DialogFragment() , OnMapReadyCallback {
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10f))
 
-            mMap.setOnMapLongClickListener { latLng ->    mMap.addMarker(
+            mMap.setOnMapClickListener { latLng ->    mMap.addMarker(
                 MarkerOptions().position(latLng).title(Geocoder(requireContext()).getFromLocation(latLng.latitude, latLng.longitude, 1).toString())
 
             )
